@@ -9,11 +9,9 @@ Click on a practical below to get started:
 
 ## 🧪 Practicals
 
-- [Practical 1 – Basics of R](Practical%201%20-%20Basics%20of%20R.html)
-- [Practical 1 – Exploring data and graphing](Practical%201%20-%20Exploring%20data%20and%20graphing.html)
-- [Practical 2 – Experimental design and subsampling data](Practical%202%20-%20Experimental%20design%20and%20subsampling%20data.html)
-- [Practical 2 – Correlation analysis](Practical%202%20-%20Correlation%20analysis.html)
-- [Practical 4 – Group comparisons](Practical%204%20-%20Group%20comparisons.html)
-- [Practical 5 – Analysing count data](Practical%205%20-%20Analysing%20count%20data.html)
-
----
+- <a href="Practical%201%20-%20Basics%20of%20R.html" target="_blank">Practical 1 – Basics of R</a>
+- <a href="Practical%201%20-%20Exploring%20data%20and%20graphing.html" target="_blank">Practical 1 – Exploring data and graphing</a>
+- <a href="Practical%202%20-%20Experimental%20design%20and%20subsampling%20data.html" target="_blank">Practical 2 – Experimental design and subsampling data</a>
+- <a href="Practical%202%20-%20Correlation%20analysis.html" target="_blank">Practical 2 – Correlation analysis</a>
+- <a href="Practical%204%20-%20Group%20comparisons.html" target="_blank">Practical 4 – Group comparisons</a>
+- <a href="Practical%205%20-%20Analysing%20count%20data.html" target="_blank">Practical 5 – Analysing count data</a>
