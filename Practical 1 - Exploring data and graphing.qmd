@@ -9,7 +9,7 @@ format:
 editor: visual
 ---
 
-# LEARNING OUTCOMES (LOs)
+# Learning Outcomes (LOs)
 
 Here's what you should know and be able to do after completing this practical:
 
@@ -29,7 +29,7 @@ Here's what you should know and be able to do after completing this practical:
 
 -   LO8: Remove objects from the R Environment
 
-# TUTORIAL
+# Tutorial
 
 ### Simple plot of data
 
@@ -735,7 +735,7 @@ legend("bottomright",
 
 ### Plotting data separately
 
-Alternatively you could plot males and females separately in two plots. 
+Alternatively you could plot males and females separately in two plots.
 
 Start by creating two subsets of the data:
 
@@ -833,7 +833,7 @@ We can change the plot region back to normal with:
 par(mfrow=c(1,1))
 ```
 
-# TASKS
+# Tasks
 
 Write your own code to complete the following 6 tasks. **NOTE**: You will not be assessed on these tasks. They are just designed to encourage you to practice.
 
@@ -854,7 +854,7 @@ Now plot the association between height and age of Asian individuals
 :::
 
 ::: {.callout-note collapse="true"}
-## Task 3 
+## Task 3
 
 Create this plot again, but this time provide your own axes labels
 :::
