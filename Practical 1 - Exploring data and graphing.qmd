@@ -1,0 +1,884 @@
+---
+title: "Practical 1 - Exploring data and graphing"
+subtitle: "Using numeric and visual descriptives"
+author: "Dr William Kay"
+date: today
+format: 
+  html:
+    css: styles.css
+editor: visual
+---
+
+# LEARNING OUTCOMES (LOs)
+
+Here's what you should know and be able to do after completing this practical:
+
+-   LO1: Create a basic plot using `plot()`
+
+-   LO2: Create a dataframe
+
+-   LO3: Explore a dataframe
+
+-   LO4: Create boxplots, q-q plots, histograms, and scatterplots
+
+-   LO5: Subset data using `subset()` and indexing `[]`
+
+-   LO6: Calculate some basic descriptive statistics
+
+-   LO7: Import data into R
+
+-   LO8: Remove objects from the R Environment
+
+# TUTORIAL
+
+### Simple plot of data
+
+R can be used to plot data
+
+Let's create some objects and plot them against each other:
+
+```{r}
+X <- seq(1, 100, 1)
+Y <- rnorm(100, 10, 5)
+plot(Y ~ X)
+```
+
+**NOTE**: Here we use a new function; the `plot()` function
+
+We have also used a new symbol `~`
+
+This symbol is called "tilde"
+
+Whenever you see it, think of the phrase "as a function of"
+
+Hence here we are plotting Y as a function of X
+
+### Basic data exploration
+
+Next, we are going to create some objects, and then combine them in a dataframe
+
+**NOTE**: In R, a dataset is called a "dataframe"
+
+```{r}
+ID <- c("A","B","C","D","E","F","G","H","I","J","K","L")
+height <- rnorm(12, 160, 12)
+weight <- rnorm(12, 70, 10)
+gender <- rep(c("male","female","non-binary"), each = 4)
+```
+
+If you don't recognise any of the code or functions above, look back at the Practical 1 - Basics of R script.
+
+We can now combine these objects into a dataframe, which we will call `dframe1`:
+
+```{r}
+dframe1 <- data.frame(ID, height, weight, gender)
+```
+
+This dataset contains the heights and weights of 12 different people. These people are coded with anonymous identification letters. The heights and weights are randomly simulated.
+
+We can now use some simple functions to explore the dataset:
+
+#### Names
+
+We can use the `names()` function to see what the column names are:
+
+```{r}
+names(dframe1)
+```
+
+#### Head
+
+Use `head()` to view the first few rows:
+
+```{r}
+head(dframe1)
+```
+
+#### Tail
+
+Use `tail()` to view the last few rows:
+
+```{r}
+tail(dframe1)
+```
+
+#### View
+
+If you want to look at the whole dataset, like you would see it in a spreadsheet, you can use `View()`
+
+**NOTE**: This will open in a new tab next to your script. You need to click on the "x" to close it.
+
+```{r}
+View(dframe1)
+```
+
+#### Structure
+
+Examine the structure of the dataset using `str()`. Remember that we looked at this function in the previous script, as applied to a single variable. Here we are applying it to a dataset:
+
+```{r}
+str(dframe1)
+```
+
+We can see that these data contain two character variables, and two numeric variables. If we wanted to change a character variable to a factor, we could do it like this:
+
+```{r}
+dframe1$gender <- as.factor(dframe1$gender)
+```
+
+You will have noticed that we used the dollar symbol `$` to specifically choose the gender column from the dframe1 dataset.
+
+#### Summary
+
+Then we can use the `summary()` function, which shows us some basic descriptive statistics or other information from the variables in the dataset.
+
+```{r}
+summary(dframe1)
+```
+
+### Plotting data
+
+Let's now have a go at plotting some of the data from dframe1.
+
+#### Plot
+
+Let's start by plotting the height using `plot()`
+
+**NOTE**: If we want to plot a single variable from the dataset, we use the dollar symbol `$` to specify. `plot()` will just shows us the values of the variable on the y-axis, with the "index" (the observation number) on the x-axis:
+
+```{r}
+plot(dframe1$height)
+```
+
+#### Boxplot
+
+We can plot a `boxplot()` as follows:
+
+```{r}
+boxplot(dframe1$height)
+```
+
+Note that there is some code you will see later which allows us to add y-axis and x-axis labels. Boxplots are good at looking at the distribution of data. It also shows us if there are any possible outliers.
+
+#### Histogram
+
+We can use histograms with `hist()` to examine the distribution of the data:
+
+```{r}
+hist(dframe1$height)
+```
+
+#### Q-Q plots (Quantile-Quantile plot)
+
+Finally, we can use a Q-Q plot. This will also inform us about the distribution of the data.
+
+**NOTE**: We plot a Q-Q plot using the `qqnorm()` function. However, we also need to use `qqline()` to plot a diagonal line on the plot:
+
+```{r}
+qqnorm(dframe1$height)
+qqline(dframe1$height)
+```
+
+If our data were normally distributed, we would expect our observations (the points) to sit on the diagonal line.
+
+**NOTE**: It's sometimes easier to execute two functions on the same line of code.
+
+You can do this by separating your functions by a semi-colon, like this:
+
+```{r}
+qqnorm(dframe1$height); qqline(dframe1$height)
+```
+
+To make sure you know what a Q-Q plot will look like for normally distributed data, let's simulate a larger sample and plot that:
+
+```{r}
+sample <- rnorm(1000, 10, 1) 
+qqnorm(sample); qqline(sample)
+```
+
+You'll see in the above that most of the observations sit on the diagonal line. There may be a small number of observations that don't sit perfectly on the line, but that's fine. What you don't want to see are considerable or consistent deviations away from the diagonal.
+
+### Subsetting a dataframe with indexing
+
+Sometimes we may want to only look at some observations from a dataset. To do this we would need to perform "subsetting". We can subset in a few ways.
+
+First, we're going to look at "indexing". We use square brackets `[]` for this.
+
+All we do is we type the name of the dataframe object, and then put square brackets afterwards. Then, we put two numbers in those square brackets.
+
+The first number represents the row number(s) and the second number represents the column number(s).
+
+For example, look at the observations in the first row:
+
+```{r}
+dframe1[1,]
+```
+
+Because we have not specified any columns, we get them all.
+
+Next, let's look at all of the rows for the first column:
+
+```{r}
+dframe1[,1]
+```
+
+If we want to look at more than one column or row at a time, we can easily do that:
+
+```{r}
+dframe1[1:2,]
+dframe1[,1:2]
+```
+
+We could also state directly the column names instead:
+
+```{r}
+dframe1[,c("ID", "height")]
+```
+
+And here is an example of doing a combination of both. Specifically, let's look at the height and weight column only for the first 3 individuals:
+
+```{r}
+dframe1[1:3, 2:3]
+dframe1[1:3, c("height","weight")]
+```
+
+**NOTE**: If we wanted to, we could store this inside a new object. Here I name that object "sub" which is short for subset:
+
+```{r}
+sub <- dframe1[1:3, c("height","weight")]
+```
+
+We can use subsetting to overwrite values in a dataset.
+
+For example, imagine we found that the 3rd weight value in the data was erroneous.
+
+We would in that case want to replace that value with NA (a missing observation).
+
+To do that we could simply write:
+
+```{r}
+dframe1[3, "weight"] <- NA
+```
+
+Now if we look at the weight of the first few individuals, we can see that the third one has changed to NA:
+
+```{r}
+dframe1[1:5, "weight"]
+```
+
+::: {.callout-note collapse="true"}
+## Have a go
+
+Now you have a go at some indexing.
+
+Create an object called "sub2" and store inside that object the weight and gender data for the first 5 individuals
+:::
+
+### Selecting observations from a specific column:
+
+We can also select specific observations from a single column using indexing.
+
+**NOTE**: When we do this, because a single variable doesn't have both rows and columns, we don't need two numbers inside the square brackets. Instead, we can use something called a logical statement.
+
+For example, let's look at the heights of individuals that only identify as male. To do this we take the height column from the dataset, and then index it specifically for when gender is equal to male:
+
+```{r}
+dframe1$height[dframe1$gender=="male"]
+```
+
+The use of two equal symbols is important. You'll notice if you try to run this same line of code with only 1 equal symbol, it gives you an error:
+
+```{r eval=FALSE}
+dframe1$height[dframe1$gender="male"]
+```
+
+This is because strictly speaking the two equals symbols is the **comparison operator**. It checks equality. Whereas the single equal symbol actually performs the same thing as the assignment operator `<-`
+
+The way I remember it is to think of the first equal sign as meaning "is" and the second equal sign as meaning "equal to". Hence two equals signs means: "is equal to".
+
+Thus, this line of code is literally asking R to tell you the height data when gender "is equal to" male.
+
+If we wanted to, we could calculate the mean height of the male individuals:
+
+```{r}
+mean(dframe1$height[dframe1$gender=="male"])
+```
+
+If we wanted to now calculate the mean weight of the male individuals, we would in theory use the same code, but just change height to weight:
+
+```{r}
+mean(dframe1$weight[dframe1$gender=="male"])
+```
+
+Hmm... That's odd. Why is it showing us `NA`?
+
+That's because, as you'll remember from the Basics of R script, when there are
+
+NAs in the data, R cannot calculate a mean unless you put `na.rm = TRUE`
+
+Let's try it with that added in:
+
+```{r}
+mean(dframe1$weight[dframe1$gender=="male"], na.rm = TRUE)
+```
+
+Now it works.
+
+**HINT**: A slightly adapted version of the line of code above might come in handy for the **BI1004 SBA**!
+
+### Subsetting using the `subset()` functions
+
+We can also perform subsetting using the `subset()` function.
+
+Let's subset only the individuals with ID of "A", "B", and "C":
+
+```{r}
+subset(dframe1, ID %in% c("A","B","C"))
+```
+
+Again we could store this inside an object, if we wanted to:
+
+```{r}
+ABC <- subset(dframe1, ID %in% c("A","B","C"))
+ABC
+```
+
+We can again perform logical statements in the subset function.
+
+For example, subset individuals taller than 160cm:
+
+```{r}
+over160cm <- subset(dframe1, height > 160)
+over160cm
+```
+
+Or individuals who weigh less than 65 kg
+
+```{r}
+under65kg <- subset(dframe1, weight < 65)
+under65kg
+```
+
+::: {.callout-note collapse="true"}
+## Have a go
+
+Now you have a go.
+
+Use the subset function to create a subset for only the male and females
+:::
+
+### Removing objects from the "R Environment"
+
+If we wanted to remove something that we have created in R, such as an object or dataframe, we can use the function `rm()`
+
+For example, let's remove the "over160cm" and "under65kg" objects:
+
+```{r}
+rm(over150cm)
+rm(over65kg)
+```
+
+In fact we could type more than one thing inside `rm()`
+
+Let's remove both "ABC" and "sub":
+
+```{r}
+rm(sub, ABC)
+```
+
+If you want to know what R has in it's Environment at any time, you can simply run the `ls()` function:
+
+```{r}
+ls()
+```
+
+In fact, we can use this to remove everything from R's Environment.
+
+**CAUTION**: Be very careful using this code, because it will delete everything you had already created in R!
+
+```{r}
+rm(list=ls())
+```
+
+If you ran the code above, it will have cleared your Environment. See on the right-hand side, your "Environment" is now empty.
+
+### Importing data
+
+Let's start working with some real data
+
+We are going to be looking at some physiological data collected on students
+
+Specifically, we're going to be looking at the "Respiratory Flow" dataset
+
+These data are saved in a file called "RespiratoryFlow.csv"
+
+Go to Learning Central and download "RespiratoryFlow.csv"
+
+This dataset measures respiratory flow in a sample of students.
+
+The dataset also contains some other variables: height, weight, age and gender.
+
+Once you have downloaded the data, you can then use the `read.csv()` function to import it.
+
+Inside the `read.csv()` function, we include another function called `file.choose()`
+
+**IMPORTANT**: If you run this code, it will open a new window on your device. You will need to navigate to the dataset that you have downloaded (it will most likely be in your "Downloads" folder) and then select it and open it:
+
+```{r}
+flowData <- read.csv(file.choose(), header = T, na.strings = "", stringsAsFactors = T)
+```
+
+**NOTE**: There is a lot going on in the above line of code:
+
+-   `header = T`: This tells R that the first row in the dataset consists of column headers
+
+-   `na.strings = ""`: This tells R that any cells in the dataset which are blank need to be set to "NA"
+
+-   `stringsAsFactors = T`: This tells R that any words or letters (i.e. characters) in the dataset should be set as factors i.e. categorical groups.
+
+### Explore the data
+
+You should now have "flowData" in your Environment. You can now explore the data:
+
+```{r}
+names(flowData)
+head(flowData)
+tail(flowData)
+str(flowData)
+summary(flowData)
+```
+
+### Plot some of the data
+
+Let's start by plotting height against weight. We can include lots of arguments in the `plot()` function to tell R some specific details of what it should plot.
+
+For example:
+
+-   Use `xlab` to change the x-axis label
+
+-   Use `ylab` to change the y-axis label
+
+-   `pch` = plot character. Here we are using number 20 - see ?pch
+
+-   `col = "red"` changes the colour of the points to red
+
+-   Changing the `las` changes the rotation of the axis labels. If you set `las = 1`, it makes the axis labels all horizontal
+
+```{r}
+plot(flowData$height ~ flowData$weight, 
+     xlab = "Height (cm)",
+     ylab = "Weight (kg)",
+     pch = 20,
+     col = "red",
+     las = 1)
+```
+
+Next, let's look at a boxplot which shows us how height varies between genders:
+
+```{r}
+boxplot(flowData$height ~ flowData$gender, 
+        ylab = "Height (cm)", 
+        xlab = "Gender", 
+        names = c("Female", "Male"), 
+        pch = 20, 
+        las = 1)
+```
+
+Now, these data don't have any information about ethnicity, so let's make some up!
+
+First, create an object called "ethnicities" which contains 4 different ethnicities:
+
+```{r}
+ethnicities <- as.factor(c("White", "Black", "Asian", "Other"))
+```
+
+Then, we can use the `sample()` function to randomly select an ethnicity for each observation in our `flowData.` We can store this inside a new column we create called `ethnicity`:
+
+```{r}
+flowData$ethnicity <- sample(ethnicities, 211, replace = T)
+```
+
+The sample code is saying the following:
+
+Randomly sample from the ethnicities object. Specifically, randomly select 211 observations. The `replace = T` sets replacement to TRUE. This means once an ethnicity has been selected, it is then put back and so can by chance be selected again.
+
+Now that we have these data, we could produce a boxplot that shows data across two categorical groups (both gender and ethnicity):
+
+```{r}
+boxplot(flowData$height ~ flowData$gender * flowData$ethnicity, 
+        ylab = "Height (cm)", 
+        xlab = "Gender", 
+        pch = 20, 
+        las = 3)
+```
+
+Oh, there's an issue with this figure.
+
+The Gender x-axis label overlaps with the names of the groups.
+
+One solution is to plot the figure, but do not display an x-axis just yet:
+
+```{r}
+boxplot(flowData$height ~ flowData$gender * flowData$ethnicity, 
+        ylab = "Height (cm)", 
+        xlab = "", 
+        pch = 20, 
+        las = 3)
+```
+
+Then you could write in the figure legend that "F" and "M" represent Female and Male, respectively.
+
+Alternatively, we could use some code to change the way the figure is plotted so that there is more space to show the x-axis label. Here's how we do this:
+
+```{r}
+par(mar = c(7, 4, 4, 2))
+```
+
+`par()` is the function to change graphical parameters. The `mar` argument allows us to set the size of the margins (bottom, top, left, right).
+
+By default the margins are c(5, 4, 4, 2) + 0.1.
+
+We have set these to c(7, 4, 4, 2)
+
+Now we can re-plot the boxplot and you'll see there's more space at the bottom.
+
+And we can manually add an x-axis label using the `mtext()` function:
+
+```{r}
+boxplot(flowData$height ~ flowData$gender * flowData$ethnicity, 
+        ylab = "Height (cm)", 
+        xlab = "", 
+        pch = 20, 
+        las = 3)
+mtext("Gender.Ethnicity", side = 1, line = 4.5)
+```
+
+-   `side = 1` tells R to plot the text on the bottom axis
+
+-   `line = 4.5` tells R how far down the bottom axis to plot (higher number = further down)
+
+### Examine the data distributions
+
+Remember from the lecture that the distribution of data is important to examine.
+
+We can apply histograms and Q-Q plots to numeric data:
+
+```{r}
+hist(flowData$height)
+qqnorm(flowData$height);qqline((flowData$height))
+```
+
+height looks quite normal.
+
+What about weight?
+
+```{r}
+hist(flowData$weight)
+qqnorm(flowData$weight);qqline((flowData$weight))
+```
+
+This definitely looks odd - there is a clear curved pattern in the data.
+
+We can also plot the distribution of categorical data. We can do this just using `plot()`.
+
+When `plot()` is applied to a categorical variable, it will default to a barplot and show us how many observations of each category exists:
+
+```{r}
+plot(flowData$gender)
+plot(flowData$ethnicity)
+```
+
+In fact, we can see the same numbers by using the `table()` function:
+
+```{r}
+table(flowData$gender)
+table(flowData$ethnicity)
+```
+
+If we wanted to plot a barplot specifically, we can't just apply barplot to a categorical variable. The following will give you an error:
+
+```{r eval=FALSE}
+barplot(flowData$gender)
+```
+
+This is because barplot needs numbers to plot. These numbers would represent the heights of the bars. In fact, we can get this from the `table()` function, so we could use that:
+
+```{r}
+barplot(table(flowData$gender))
+```
+
+### Data transformations
+
+Let's look again at the weight data:
+
+```{r}
+hist(flowData$weight)
+```
+
+This does not look normally distributed. Indeed, we saw that in the Q-Q plot:
+
+```{r}
+qqnorm(flowData$weight); qqline(flowData$weight)
+```
+
+Let's apply some mathematical transformations to the weight values to see if we can make them normally distributed.
+
+**NOTE**: You can nest a transformation function e.g. `log()` within a plotting function e.g., `hist()`
+
+Let's try a natural logarithm transformation first:
+
+```{r}
+hist(log(flowData$weight))
+qqnorm(log(flowData$weight)); qqline(log(flowData$weight))
+```
+
+log looks better.
+
+What about a square root transformation?
+
+```{r}
+hist(sqrt(flowData$weight))
+qqnorm(sqrt(flowData$weight)); qqline(sqrt(flowData$weight))
+```
+
+This looks a bit worse.
+
+What about an exponential transformation?
+
+```{r}
+hist(exp(flowData$weight))
+qqnorm(exp(flowData$weight)); qqline(exp(flowData$weight))
+```
+
+This definitely hasn't worked!
+
+The best one was `log()` so let's stick with that one.
+
+We can store a transformed version of a variable inside the original dataset by creating a new column:
+
+```{r}
+flowData$logWeight <- log(flowData$weight)
+```
+
+### Adding colour to a scatterplot
+
+So far we have seen how to plot a scatter plot with two variables.
+
+The following code shows you how to add a third variable to a plot using colour.
+
+Start by choosing the two colours you want to represent male and female, respectively:
+
+```{r}
+colours <- c(M = "black", 
+             F = "lightgrey")
+```
+
+Then, when you plot the data, you can use some clever indexing in the `col` argument.
+
+**NOTE**: You must make sure the variable is a "Character" for this to work.
+
+```{r}
+plot(height ~ weight, data = flowData, 
+     xlab = "Weight (kg)", 
+     ylab = "Height (cm)", 
+     pch = 20, 
+     col = colours[as.character(flowData$gender)], 
+     las = 1)
+```
+
+Remember that plots like these should have a legend, otherwise it's not obvious what the colours represent.
+
+Let's plot it again but this time including a legend:
+
+```{r}
+plot(height ~ weight, data = flowData, 
+     xlab = "Weight (kg)", 
+     ylab = "Height (cm)", 
+     pch = 20, 
+     col = colours[as.character(flowData$gender)], 
+     las = 1)
+legend("bottomright", 
+       legend = c("Male", "Female"), 
+       col = c("black", "lightgrey"),
+       pch = 20, 
+       title = "Gender") 
+```
+
+-   `bottomright` = Position of the legend
+
+-   `legend = c("Male", "Female")` = Labels in the legend
+
+-   `col =` = Colours corresponding to the labels
+
+-   `pch = 20` = Symbol used in the legend
+
+-   `title =` = Title of the legend
+
+Note that you don't have to change the colours, you could change the plot characters:
+
+```{r}
+chrs <- c(M = 16, 
+          F = 1)
+plot(height ~ weight, 
+     data = flowData, 
+     xlab = "Weight (kg)", 
+     ylab = "Height (cm)", 
+     pch = chrs[as.character(flowData$gender)], 
+     col = "black", 
+     las = 1)
+legend("bottomright",
+       legend = c("Male", "Female"),
+       col = "black",
+       pch = c(16, 1),
+       title = "Gender")
+```
+
+### Plotting data separately
+
+Alternatively you could plot males and females separately in two plots. 
+
+Start by creating two subsets of the data:
+
+```{r}
+male <- subset(flowData, gender == "M") 
+female <- subset(flowData, gender == "F") 
+```
+
+Now use the `droplevels()` function to remove any categories that are no longer needed:
+
+```{r}
+male <- droplevels(male)
+female <- droplevels(female)
+```
+
+Before we create the plots, we can change the way R displays subsequent figures.
+
+We can do this again using `par()` but this time using the `mfrow` argument
+
+`mfrow=c(1,2)` means that the **NEXT** plots you produce will exist in a 1 row, 2 column array:
+
+```{r}
+par(mfrow=c(1,2))
+plot(height ~ weight, 
+     data = female, 
+     xlab = "Weight (kg)", 
+     ylab = "Height (cm)", 
+     pch = 20, 
+     col = "black", 
+     las = 1)
+plot(height ~ weight, 
+     data = male, 
+     xlab = "Weight (kg)", 
+     ylab = "Height (cm)", 
+     pch = 20, 
+     col = "red", 
+     las = 1)
+```
+
+We could make it so that they appear one above the other rather than side-by-side:
+
+```{r}
+par(mfrow=c(2,1))
+plot(height ~ weight, 
+     data = female, 
+     xlab = "Weight (kg)", 
+     ylab = "Height (cm)", 
+     pch = 20, 
+     col = "black", 
+     las = 1)
+plot(height ~ weight, 
+     data = male, 
+     xlab = "Weight (kg)", 
+     ylab = "Height (cm)", 
+     pch = 20, 
+     col = "red", 
+     las = 1)
+```
+
+If we are going to compare them like this then it makes more sense to put them all on the same axes.
+
+Hence we can use `xlim` and `ylim` to adjust the axes ranges.
+
+We can also use `xaxp` to adjust the positions of the x-axis tick marks to c(start, end, number of ticks).
+
+```{r}
+par(mfrow=c(2,1))
+plot(height ~ weight, 
+     data = female, 
+     xlab = "Weight (kg)", 
+     ylab = "Height (cm)", 
+     pch = 20, 
+     col = "black", 
+     las = 1, 
+     xlim = c(35, 185), 
+     ylim = c(145, 215),
+     xaxp = c(30, 190, 16))
+plot(height ~ weight, 
+     data = male,
+     xlab = "Weight (kg)", 
+     ylab = "Height (cm)", 
+     pch = 20, 
+     col = "red",
+     las = 1, 
+     xlim = c(35, 185), 
+     ylim = c(145, 215),
+     xaxp = c(30, 190, 16))
+```
+
+So, hopefully you can see that there are lots of ways to explore data!
+
+We can change the plot region back to normal with:
+
+```{r}
+par(mfrow=c(1,1))
+```
+
+# TASKS
+
+Write your own code to complete the following 6 tasks. **NOTE**: You will not be assessed on these tasks. They are just designed to encourage you to practice.
+
+**NOTE**: You aren't expected to remember how to do all of these yet!
+
+**HINT**: Look back at earlier sections of your script to find the bits of code that you need, and adapt them (that's the best way to work in R)
+
+::: {.callout-note collapse="true"}
+## Task 1
+
+Subset the flowData so that you only have data from Asian individuals
+:::
+
+::: {.callout-note collapse="true"}
+## Task 2
+
+Now plot the association between height and age of Asian individuals
+:::
+
+::: {.callout-note collapse="true"}
+## Task 3 
+
+Create this plot again, but this time provide your own axes labels
+:::
+
+::: {.callout-note collapse="true"}
+## Task 4
+
+Again, create the plot, but this time ALSO change the type of plot symbol
+:::
+
+::: {.callout-note collapse="true"}
+## Task 5
+
+Now go back to using the original flowData. Explore transformations of male weight - what looks to be the most "normal"?
+:::
+
+::: {.callout-note collapse="true"}
+## Task 6
+
+Using the original flowData, create a boxplot of weight as a function of gender - which gender looks heavier?
+:::
+
+::: {.callout-note collapse="true"}
+## Task 7
+
+Type ?boxplot and see if you can work out how to change the "notch" and "boxwex" for your boxplots. Set "notch" to TRUE and boxwex to 0.5
+:::
