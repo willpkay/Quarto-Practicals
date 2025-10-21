@@ -1,11 +1,9 @@
 ---
-title: "Welcome to BI1001 Biostatistics Practicals"
+title: "BI1001 Biostatistics Practicals"
 format: html
 ---
 
-# 👋 Welcome to BI1001
-
-This site contains all the practicals for the BI1001 Biostatistics module. 
+This site contains all the practicals for BI1001 Biostatistics. 
 
 Click on a practical below to get started:
 
