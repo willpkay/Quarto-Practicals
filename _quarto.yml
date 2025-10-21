@@ -6,6 +6,8 @@ website:
   title: "BI1001 Biostatistics Practicals"
   navbar:
     left:
+      - text: "Home"
+        href: index.html
       - text: "Practical 1 - Basics of R"
         href: Practical 1 - Basics of R.html
       - text: "Practical 1 - Exploring data and graphing"
