@@ -494,7 +494,7 @@ rep(chr, 2)
 
 You can ask R for help with a function by putting a question mark in front of the function:
 
-```{r}
+```{r eval=FALSE}
 ?rep
 ```
 
