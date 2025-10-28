@@ -1,0 +1,23 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "BI1001 Biostatistics Practicals"
+  navbar:
+    left:
+      - text: "Home"
+        href: index.html
+      - text: "Practical 1 - Basics of R"
+        href: Practical 1 - Basics of R.html
+      - text: "Practical 1 - Exploring data and graphing"
+        href: Practical 1 - Exploring data and graphing.html
+      - text: "Practical 2 - Experimental design"
+        href: Practical 2 - Experimental design.html
+      - text: "Practical 2 - Correlation analysis"
+        href: Practical 2 - Correlation analysis.html
+      - text: "Practical 4 - Group comparisons"
+        href: Practical 4 - Group comparisons.html
+      - text: "Practical 5 - Analysing count data"
+        href: Practical 5 - Analysing count data.html
+        

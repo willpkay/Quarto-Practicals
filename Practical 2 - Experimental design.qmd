@@ -1,0 +1,792 @@
+---
+title: "Practical 2 - Experimental design"
+subtitle: "Sampling data and more"
+author: "Dr William Kay"
+date: today
+format: 
+  html:
+    css: styles.css
+editor: visual
+---
+
+# Learning Outcomes (LOs)
+
+Here's what you should know and be able to do after completing this practical:
+
+-   LO1: Explain different sampling methods
+
+-   LO2: Write code to perform different sampling methods
+
+-   LO3: Simulate data, including from different distributions
+
+-   LO4: Run a basic loop
+
+-   LO5: Set a "seed" and explain what it does
+
+-   LO6: Explain how increased sample size affects estimates (of things like mean values)
+
+-   LO7: Subset data using subset() and indexing
+
+-   LO8: Explain the importance of replication
+
+# TUTORIAL
+
+### Simulating data and distributions
+
+In this script will we be working with entirely simulated data. In other scripts, we will use more real data, but to exemplify experimental design concepts, it's actually I think more helpful to work with simulated data.
+
+Let's imagine a population that consists of 100,000 individuals.
+
+In this first example, we are going to simulate the heights of 100,000 people.
+
+Across the world, people differ in their heights considerably, but on average if you look across all adults, regardless of sex or gender, it's reasonable to consider a typical mean height of 170 cm with a standard deviation of 10 cm. For examples, see: https://en.wikipedia.org/wiki/Average_human_height_by_country
+
+So, let's simulate a single variable, which is normally distributed and has a mean of 170 and a SD of 10.
+
+I'm calling this variable `popHeights` (population heights):
+
+```{r}
+popHeights <- rnorm(100000, 170, 10)
+```
+
+This variable has been created using the `rnorm()` function, which generates random numbers from a normal distribution
+
+If you want to see how the rnorm function works (or any function for that matter), type "?" followed by the function name:
+
+```{r eval=FALSE}
+?rnorm
+```
+
+We saw `rnorm()` in the first script (Practical 1 - Basics of R) but as a reminder:
+
+The `rnorm()` function has three arguments: n, mean, and sd
+
+-   `n` = the number of observations you want to simulate
+
+-   `mean` = this is the mean value of the normal distribution you want to simulate from
+
+-   `sd` = this is the sd of the distribution
+
+If we wanted to, we could plot a quick histogram of the population heights, to take a look:
+
+```{r}
+hist(popHeights)
+```
+
+Remember that in most scientific experiments, we wouldn't collect data from the entire population.
+
+We would instead collect a **sample**. Let's look at how to do this:
+
+Suppose we want to measure the heights of a sample of 50 people from our population.
+
+We can use the `sample()` function. We'll store the sample of heights in a new object called `sHeights`:
+
+```{r}
+sHeights <- sample(popHeights, 50, replace = FALSE)
+```
+
+Importantly, in the above function I set `replace = FALSE`. This is to tell R that once an individual has been selected, they cannot be selected again. This is known as **sampling without replacement** and is typical for real world surveys, because you may not want to sample the same person's height twice.
+
+If I were to set `replace = TRUE`, this would simulate **sampling with replacement**: after selecting an individual, that person is returned to the population and could be chosen again.
+
+Scientists sometimes do this in simulations to see how results might vary if we repeated an experiment.
+
+You don't need to worry about this for now — just know that it exists.
+
+Lets look at our sample distribution:
+
+```{r}
+hist(sHeights)
+```
+
+We could, if we wanted to, calculate the mean of our sample:
+
+```{r}
+mean(sHeights)
+```
+
+We will explore sample distributions in more detail later. For now, let's simulate a slightly more realistic scenario - one where we don't just collect data on 1 variable, but on a few different variables.
+
+Let's imagine a population of 100,000 humans who all have different heights, weights, ages, etc.:
+
+```{r}
+population <- data.frame(
+  height = rnorm(100000, 170, 10),
+  weight = rnorm(100000, 65, 10),
+  age = rnorm(100000, 40, 15),
+  systolic_bp = rnorm(100000, 120, 15), 
+  diastolic_bp = rnorm(100000, 80, 10), 
+  cholesterol = rnorm(100000, 5, 1), 
+  gender = sample(c("Male", "Female", "Other"), 100000, replace = TRUE, prob = c(0.49, 0.49, 0.02)),
+  ethnicity = sample(c("White", "Black", "Asian", "Other"), 100000, replace = TRUE, prob = c(0.3, 0.3, 0.3, 0.1)), 
+  university = sample(LETTERS[1:10], 100000, replace = TRUE, prob = rep(0.1, 10))
+)
+```
+
+This simulation should take less than 1 second. R can handle very large datasets very quickly!
+
+Let's make sure we tell R that the gender, ethnicity, and university variables are all categorical (factors):
+
+```{r}
+population$gender <- as.factor(population$gender)
+
+population$ethnicity <- as.factor(population$ethnicity)
+
+population$university <- as.factor(population$university)
+```
+
+For gender, we've simulated a population where 49% of people are male, 49% are female, and 2% identify as another gender (e.g., non-binary, transgender, etc.).
+
+For ethnicity, we've simulated a scenario where 30% of people are White, 30% are Black, 30% are Asian, and 10% belong to other ethnic groups.
+
+**NOTE**: These gender and ethnicity proportions are entirely hypothetical and are not intended to reflect real-world population data.
+
+We've also simulated these people all attending one of 10 different universities.
+
+Let's take a look at the first few rows of the dataset we just created:
+
+```{r}
+head(population)
+```
+
+Now we can start looking at some of the possible sampling strategies we might use to sample from this population.
+
+### Random sampling
+
+Pick 30 individuals at random from the entire population.
+
+First we create an object called `rowNums`. In this we store 30 random numbers from 1:100000:
+
+```{r}
+rowNums <- sample(1:100000, 30, replace = F)
+```
+
+Then, we use that to select which rows to choose when performing indexing on our population:
+
+```{r}
+random_sample <- population[rowNums, ]
+```
+
+Let's look at the first few of these randomly sampled individuals:
+
+```{r}
+head(random_sample)
+```
+
+Note that the first column that you see represents the original row numbers within the population
+
+### Systematic sampling
+
+Let's now choose every 100th individual within the population. Let's start by creating a sequence which takes every 100th individual starting from individual number 1:
+
+```{r}
+seq1 <- seq(1, 100000, 100)
+```
+
+Then, we use this seq1 in our indexing:
+
+```{r}
+systematic_sample <- population[seq1, ]
+```
+
+Let's look at the first few rows of these:
+
+```{r}
+head(systematic_sample)
+```
+
+### Stratified random sampling
+
+In stratified random sampling we want to take a sample that proportionally represents the population.
+
+Let's look at taking a stratified random sample according to gender.
+
+Before we take a sample, we need to work out how many individuals we have of each gender. The `table()` function is good for this:
+
+```{r}
+table(population$gender)
+```
+
+So this is how many individuals we have of each gender. But what about as a proportion?
+
+For this we can apply the `prop.table()` function to this table:
+
+```{r}
+prop.table(table(population$gender))
+```
+
+So we have 48.634% female, 49.306% male, and 2.06% other.
+
+To keep things simple, let's round these numbers to whole percentages: 49%, 49% and 2%.
+
+We can now use those values to perform our stratified random sampling.
+
+Imagine we wanted a sample of 100 individuals in total. To keep our sample proportionally representative of the population, that would mean we have 49 male, 49 female, and 2 other.
+
+Here's one way to do this. First, create some subsets:
+
+```{r}
+male <- subset(population, gender == "Male")
+
+female <- subset(population, gender == "Female")
+
+other <- subset(population, gender == "Other")
+```
+
+Now, we can randomly sample 49, 49, and 2 individual from these respectively:
+
+```{r}
+
+sMale <- male[sample(1:nrow(male), 49, replace = FALSE), ]
+
+sFemale <- female[sample(1:nrow(female), 49, replace = FALSE), ]
+
+sOther <- other[sample(1:nrow(other), 2, replace = FALSE), ]
+```
+
+Explanation of the above:
+
+1.  For each gender, we first create a subset of the population.
+
+2.  Then we use `sample()` to randomly select the desired number of rows.
+
+3.  The `1:nrow(data)` part creates a sequence of row numbers that is specific to each dataset so that the `sample()` function knows which rows to pick from.
+
+We now have our three subsets. We can combine them using `rbind()`, which stands for "row bind".
+
+`rbind()` stacks the datasets on top of each other (adds rows), so all the selected individuals are together in one dataset. This works because all three subsets have the same columns and structure.
+
+```{r}
+stratified_sample <- rbind(sMale, sFemale, sOther)
+```
+
+Let's have a look at this sample either using `head()` or `View()`:
+
+```{r}
+head(stratified_sample)
+```
+
+```{r eval=FALSE}
+View(stratified_sample)
+```
+
+### Quota sampling:
+
+We can use a very similar approach to perform quota sampling.
+
+Let's assume we want data on 5 individuals from each ethnicity.
+
+First, create ethnicity subsets:
+
+```{r}
+Asian <- subset(population, ethnicity == "Asian") 
+Black <- subset(population, ethnicity == "Black") 
+White <- subset(population, ethnicity == "White") 
+Other <- subset(population, ethnicity == "Other")
+```
+
+Now select 5 individuals from each subset:
+
+```{r}
+sAsian <- Asian[sample(1:nrow(Asian), 5, replace = FALSE), ] 
+sBlack <- Black[sample(1:nrow(Black), 5, replace = FALSE), ] 
+sWhite <- White[sample(1:nrow(White), 5, replace = FALSE), ] 
+sOther <- Other[sample(1:nrow(Other), 5, replace = FALSE), ]
+```
+
+And again `rbind()` them:
+
+```{r}
+quota_sample <- rbind(sAsian, sBlack, sWhite, sOther)
+```
+
+Have a look, this time just print the entire dataset as it's only small (20 individuals):
+
+```{r}
+quota_sample
+```
+
+### Cluster sampling:
+
+Finally, let's take a look at cluster sampling.
+
+This is where we might select only a few specific clusters (characteristics), but include all individuals who have those characteristics. For example, let's imagine we only wanted to look at people who went to three different universities (university A, B, and C):
+
+```{r}
+A <- subset(population, university == "A") 
+B <- subset(population, university == "B") 
+C <- subset(population, university == "C")
+```
+
+In cluster sampling, we collect data on all individuals from those clusters. So we don't need to perform any further sampling, we just `rbind()` the entire three clusters together:
+
+```{r}
+ABC <- rbind(A, B, C)
+```
+
+Now we can have a look at it:
+
+```{r}
+head(ABC)
+
+tail(ABC)
+
+table(ABC$university)
+```
+
+Notice how even though there are no longer any observations in the D-J universities, those categories still exist?
+
+We can remove empty categories by using the `droplevels()` function:
+
+```{r}
+ABC <- droplevels(ABC)
+```
+
+Now look again:
+
+```{r}
+table(ABC$university)
+```
+
+### Simulating data from different distributions
+
+So far, whenever we have simulated numerical data, we have used the `rnorm()` function
+
+This will specifically simulate data from a normal distribution.
+
+Let's have another quick look at this: let's simulate 100 normally distributed height observations
+
+```{r}
+heights <- rnorm(n = 100, mean = 170, sd = 10)
+```
+
+We can look at this distribution using `hist()`
+
+```{r}
+hist(heights)
+```
+
+R can simulate data from many different distributions. Let's look at a few examples.
+
+#### Poisson Distribution
+
+The Poisson distribution models count data (whole numbers like 0, 1, 2 etc.).
+
+It has a single parameter, lambda, which determines both the mean and the variance.
+
+An obvious biological example of count data are the number of eggs a bird lays.
+
+Here we simulate 100 random numbers from a Poisson distribution with lambda = 2:
+
+```{r}
+pois <- rpois(n = 100, lambda = 2)
+```
+
+Again, we can visualise the simulated data with a histogram:
+
+```{r}
+hist(pois, main = "", xlab = "Number of eggs laid", las = 1)
+```
+
+#### Binomial Distribution
+
+The binomial distribution models data that exists in one of two categories, e.g., success/failure.
+
+Biological example: We have 100 people suffering from pain and we want to test if a drug can reduce it.
+
+`rbinom()` parameters:
+
+-   `n` = number of individuals we are simulating (100 here)
+
+-   `size` = number of "trials" per individual (1 if they get the drug once)
+
+-   `prob` = probability of success on each trial (probability the drug works)
+
+##### Example 1: Drug has 50% chance to reduce pain
+
+```{r}
+binom <- rbinom(n = 100, size = 1, prob = 0.5)
+
+hist(binom, main = "", xlab = "0 = Same pain, 1 = Reduced pain", las = 1)
+```
+
+##### Example 2: Drug has 75% chance to reduce pain
+
+```{r}
+binom2 <- rbinom(n = 100, size = 1, prob = 0.75)
+
+hist(binom2, main = "", xlab = "0 = Same pain, 1 = Reduced pain", las = 1)
+```
+
+##### Example 3: Each person gets 2 doses of the drug (size = 2)
+
+The number now represents how many times the drug successfully reduced pain out of two attempts.
+
+Assuming that on both attempts the chance of reducing pain was 75%:
+
+```{r}
+binom3 <- rbinom(n = 100, size = 2, prob = 0.75)
+
+hist(binom3, main = "", xlab = "Number of times pain was reduced (0, 1, 2)", las = 1)
+```
+
+#### Bimodal distribution
+
+You may remember from the exploring data and graphing lecture, I mentioned that spiders are often sexually dimorphic - females are typically larger than males.
+
+For this you will need to install another package (if that doesn't work, just skip over this bit):
+
+```{r eval=FALSE}
+install.packages("FamilyRank")
+
+library(FamilyRank)
+```
+
+This distribution needs a total sample size, a mean and SD for each of the two peaks (modes) in the distribution, and a probability value which dictates the probability of being in mode 1.
+
+```{r eval=FALSE}
+binorm <- rbinorm(n = 200,   # 200 spiders in total 
+                  mean1 = 2, # mean for mode 1 (think of male spider diameter in cm) 
+                  mean2 = 4, # mean for mode 2 (think of female spider diameter in cm) 
+                  sd1 = 0.3, # SD for male spider diameter 
+                  sd2 = 0.5, # SD for female spider diameter 
+                  p1 = 0.5)  # Probability of being a male spider (50%)
+
+hist(binorm, main = "", las = 1, xlab = "Spider diameter (cm)")
+```
+
+There are many more possible distributions that data can follow, but we will stop here for now!
+
+Just remember (i) that data can follow different distributions - it won't always be "normal" and (ii) that for many "Parametric" statistical tests, the tests assume your data are normal - so you must check! We will cover this in detail in the next script.
+
+### Examining distributions
+
+Let's have a look at some averages, and variation, of the distributions created above:
+
+#### Normal
+
+```{r}
+hist(heights) 
+abline(v = mean(heights), col = "blue", lwd = 2) 
+abline(v = median(heights), col = "red", lwd = 2) 
+mean(heights) 
+median(heights) 
+sd(heights)
+```
+
+#### Poisson
+
+```{r}
+hist(pois) 
+abline(v = mean(pois), col = "blue", lwd = 2) 
+abline(v = median(pois), col = "red", lwd = 2) 
+mean(pois) # This should be close to 2 
+var(pois)  # This should be close to 2
+```
+
+#### Binom
+
+```{r}
+hist(binom) 
+abline(v = mean(binom), col = "blue", lwd = 2) 
+abline(v = median(binom), col = "red", lwd = 2) 
+mean(binom)  # This should be close to 50 % 
+table(binom) # This should be close to a 50/50 split!
+```
+
+#### Binorm
+
+```{r eval=FALSE}
+hist(binorm) 
+abline(v = mean(binorm), col = "blue", lwd = 2) 
+abline(v = median(binorm), col = "red", lwd = 2) 
+mean(binorm) # The mean of a bimodal distribution is not representative of a "typical" or "average" spider! 
+sd(binorm)
+```
+
+Hopefully this exemplifies that best representation of the "average" value in a distribution isn't always the mean!
+
+### The importance of sample size
+
+Look at what happens when we create a normal distribution with 10, 100, or 1000 observations:
+
+```{r}
+hist(rnorm(10,5,1)) 
+hist(rnorm(100,5,1)) 
+hist(rnorm(1000,5,1))
+```
+
+With increasing sample size, the distribution starts to look more normal
+
+We know that in these simulated distributions the mean = 5 and sd = 1.
+
+In theory, with increasing sample size, the estimated mean and SD should get more accurate.
+
+This is because with more data (a larger sample size) we can estimate things more accurately.
+
+```{r}
+mean(rnorm(10,5,1)) 
+mean(rnorm(100,5,1)) 
+mean(rnorm(1000,5,1))
+
+sd(rnorm(10,5,1)) 
+sd(rnorm(100,5,1)) 
+sd(rnorm(1000,5,1))
+```
+
+Let's do something a little more complex...
+
+We are going to use a "loop" - this is a way of performing repeated instructions over a series of iterations (i).
+
+Before we do this, let's set up our plotting window so that we have a 2 x 2 array of plots.
+
+We must do this first (before plotting):
+
+```{r}
+par(mfrow=c(2,2)) # This tells R to plot all subsequent plots in a 2 x 2 array
+```
+
+Now, let's run a "for loop" to plot 4 histograms, each time with a different sample:
+
+We can interpret this code as follows: For every iteration (i) in iterations 1 to 4, create a histogram of 10 observations drawn from a random normal distribution with a mean = 5 and sd = 1
+
+**NOTE**: You can run this over and over again, each time it will produce 4 different graphs:
+
+```{r}
+for(i in 1:4) { 
+  hist(rnorm(10, 5, 1)) 
+  }
+```
+
+Why does this matter?
+
+This demonstrates the impact of replication. Imagine we were to take only a sample of data that consisted of 10 observations. Depending on which 10 observations we happen to select, our sample could look very different!
+
+Often we only perform an experiment once i.e., we only collect the first sample of 10 observations
+
+In fact, we may want to repeat entire experiments multiple times (known as replication) in order to ensure that our results are robust.
+
+Here's another example of this:
+
+Suppose we were measuring the height of young trees i.e., saplings (cm)
+
+We won't know in a real experiment what the true population looks like, but usefully in R we can simulate this.
+
+Let's assume that the population consists of 1000 saplings, and on average they are 50 cm tall, with SD of 5 cm:
+
+```{r}
+saplings <- rnorm(1000, mean = 50, sd = 5)
+```
+
+Let's imagine now I do an experiment - I sample the heights of just 5 saplings:
+
+```{r}
+saplings1 <- sample(saplings, 5, replace = F)
+```
+
+If I now estimate the mean of that sample, what is it?
+
+```{r}
+mean(saplings1)
+```
+
+Now let's imagine I repeat that experiment. I go back into the field on a different day and measure 5 saplings again:
+
+```{r}
+saplings2 <- sample(saplings, 5, replace = F)
+```
+
+If I now estimate the mean of that second sample, what is it?
+
+```{r}
+mean(saplings2)
+```
+
+The chances are the means of `saplings1` and `saplings2` could be quite different to each other and also quite different to the true (simulated) mean of the population
+
+Let's see what these samples both look like:
+
+Plot to visualize:
+
+```{r}
+par(mfrow=c(1,2))
+
+hist(saplings1, main="Sample 1 (5 saplings)", xlab="Height (cm)", col="lightblue", las = 1)
+
+hist(saplings2, main="Sample 2 (5 saplings)", xlab="Height (cm)", col="lightgreen", las = 1)
+```
+
+Depending on what you happened to randomly sample on each occasion, these could look quite different!
+
+In other words, when you repeat exactly the same experiment, you might end up with quite different results.
+
+If you were to repeat this experiment many times, then you could calculate an average sapling height across ALL of your experiments. This would be a much more reliable/robust average than if you'd only done the experiment once.
+
+Now let's have a look at if I were to do the experiment only twice, but this time collect a much larger sample of data on both occasions:
+
+```{r}
+saplings1b <- sample(saplings, 100, replace = F)
+
+saplings2b <- sample(saplings, 100, replace = F)
+```
+
+If we plot them again, we should see that these two distributions now look much more similar:
+
+```{r}
+par(mfrow=c(1,2))
+
+hist(saplings1b, main="Sample 1 (5 saplings)", xlab="Height (cm)", col="lightblue", las = 1)
+
+hist(saplings2b, main="Sample 2 (5 saplings)", xlab="Height (cm)", col="lightgreen", las = 1)
+```
+
+And if we were to calculate their means, not only should these both be more similar to each other, they should also both be more similar to what we know to be the true (simulated) mean in the population:
+
+```{r}
+mean(saplings1b)
+
+mean(saplings2b)
+```
+
+### Setting a seed
+
+This may seem like an odd concept, but sometimes we want to generate a random set of numbers that is always the same set of random numbers!
+
+To do this, we set a "seed". Think of a seed as a specific instance of R.
+
+The seed can be any number and must be set prior to running a random number generator:
+
+```{r}
+set.seed(1); rnorm(5, 5, 1)
+```
+
+Notice what I have done on the above line is use the semi-colon ";" - This allows me to run two functions on the same line of code, one after the other.
+
+If you run that line of code above again, you will always get the same 5 random numbers!
+
+Compare that to running the below line of code a few times, without setting a seed. You should get a random set of numbers every time:
+
+```{r}
+rnorm(5, 5, 1)
+```
+
+Why is setting a seed useful?
+
+Setting a seed is important for playing with simulations because it ensures results are reproducible every single time. This goes not just for you, but for anyone else running the code.
+
+So, in theory, every single person running the following line of code should get the same set of 5 "random" numbers:
+
+```{r}
+set.seed(1); rnorm(5, 5, 1)
+```
+
+### Subsetting data
+
+We have already seen some examples of subsetting data from a previous script, but it's so useful it's worth seeing a few more examples:
+
+Let's create a new, simulated dataset.
+
+This time we're going to create data on Alzheimer's patients
+
+We are going to do this using a seed so that everyone sees exactly the same simulated data:
+
+```{r}
+set.seed(1); Alzheimers <- data.frame(neurons = c(rnorm(100, 20, 5), rnorm(100, 20, 5)), 
+                                      group = rep(c("Asymptomatic","Symptomatic"), each = 100), 
+                                      sex = c(rep("M", 50), rep("M", 50), rep("F", 50), rep("F", 50)),
+                                      age = round(rnorm(200, 70, 5), 0))
+```
+
+Note that the "neurons" variable represents the neuron cell density in patients
+
+Have a quick look:
+
+```{r}
+head(Alzheimers)
+```
+
+There are many different ways to subset data:
+
+Selecting for a particular group e.g. Males (all these 4 lines of code achieve the same thing!):
+
+```{r}
+males <- subset(Alzheimers, sex == "M")
+
+males <- subset(Alzheimers, sex %in% "M")
+
+males <- Alzheimers[Alzheimers$sex == "M", ]
+
+males <- Alzheimers[Alzheimers$sex %in% "M", ]
+```
+
+Selecting **against** a particular group:
+
+```{r}
+Asymptomatic <- subset(Alzheimers, group != "Symptomatic")
+```
+
+Selecting individuals over or under a certain age:
+
+```{r}
+over70 <- subset(Alzheimers, age > 70)
+
+under70 <- subset(Alzheimers, age < 70)
+```
+
+Selecting individuals "greater than or equal to" a certain age:
+
+```{r}
+atLeast60 <- subset(Alzheimers, age >= 60)
+```
+
+Selecting individuals "less than or equal to" a certain age:
+
+```{r}
+age58orLess <- subset(Alzheimers, age <= 58)
+```
+
+Selecting specific rows from a dataset:
+
+```{r}
+first10 <- Alzheimers[1:10,]
+
+last20 <- Alzheimers[181:200,]
+```
+
+Selecting specific rows AND columns:
+
+```{r}
+subset <- Alzheimers[50:100, 1:2] # Select rows 50 to 100, but only data from the first 2 columns
+```
+
+# TASKS
+
+Write your own code to complete the following 6 tasks. **NOTE**: You will not be assessed on these tasks. They are just designed to encourage you to practice.
+
+**NOTE**: You aren't expected to remember how to do all of these yet!
+
+**HINT**: Look back at earlier sections of your script to find the bits of code that you need, and adapt them (that's the best way to work in R)
+
+::: {.callout-note collapse="true"}
+## Task 1
+
+Write the code to create a randomly generated dataset consisting of observations that follow a Poisson distribution with a mean value of 10. And write the code to plot this distribution.
+:::
+
+::: {.callout-note collapse="true"}
+## Task 2
+
+Write the code to execute a loop that plots 4 random poisson distributions where n = 10 and lambda = 2
+:::
+
+::: {.callout-note collapse="true"}
+## Task 3
+
+Write the code to subset the Alzheimers data so that you have a sample of 50 random individuals
+:::
+
+::: {.callout-note collapse="true"}
+## Task 4
+
+Write the code to plot a histogram of neuron cell density for only Symptomatic Alzheimer's patients
+:::
