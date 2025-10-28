@@ -775,18 +775,18 @@ Write the code to create a randomly generated dataset consisting of observations
 
 ::: {.callout-note collapse="true"}
 ## Task 2
-Write the code to execute a loop that plots 4 random poisson distributions where n = 10 and lambda = 2
 
+Write the code to execute a loop that plots 4 random poisson distributions where n = 10 and lambda = 2
 :::
 
 ::: {.callout-note collapse="true"}
 ## Task 3
-Write the code to subset the Alzheimers data so that you have a sample of 50 random individuals
 
+Write the code to subset the Alzheimers data so that you have a sample of 50 random individuals
 :::
 
 ::: {.callout-note collapse="true"}
 ## Task 4
-Write the code to plot a histogram of neuron cell density for only Symptomatic Alzheimer's patients
 
+Write the code to plot a histogram of neuron cell density for only Symptomatic Alzheimer's patients
 :::
