@@ -1,0 +1,613 @@
+---
+title: "Practical 2 - Correlation analysis"
+subtitle: "Testing for association between two continuous variables"
+author: "Dr William Kay"
+date: today
+format: 
+  html:
+    css: styles.css
+editor: visual
+---
+
+# Learning Outcomes (LOs)
+
+Here's what you should know and be able to do after completing this practical:
+
+-   LO1: Plot the association between two continuous variables
+
+-   LO2: Rank data
+
+-   LO3: Spot outliers and determine whether to remove them or not
+
+-   LO4: Check statistical test assumptions
+
+-   LO5: Perform appropriate correlation analyses
+
+-   LO6: Interpret the results from correlation analysis
+
+-   LO7: Report the results in prose
+
+-   LO8: Know what to do when assumptions aren't met
+
+# TUTORIAL
+
+### Parametric correlation analysis - Pearson's correlation
+
+For this tutorial, let's work with the Alzheimer's dataset (including also BMI data)
+
+Like last time we're going to set a seed so that we all get the same data (and therefore the same correlation analysis!
+
+Set the seed to "16" and create the Alzheimers data:
+
+```{r}
+set.seed(16) 
+
+Alzheimers <- data.frame(neurons = c(rnorm(100, 20, 5), rnorm(100, 30, 5)),
+                         group = rep(c("Asymptomatic","Symptomatic"), each = 100),
+                         sex = c(rep("M", 50), rep("M", 50), rep("F", 50), rep("F", 50)),
+                         age = round(rnorm(200, 70, 5), 0),
+                         BMI = c(rnorm(100, 22, 1), rnorm(100, 21, 1)))
+```
+
+#### Explore the data
+
+Remember, exploring the data is always a critical step
+
+Take a quick look and summarise:
+
+```{r}
+names(Alzheimers) 
+head(Alzheimers)
+tail(Alzheimers)
+str(Alzheimers) 
+summary(Alzheimers)
+```
+
+#### Define a research question and hypotheses
+
+Let's test whether neuron cell density is associated with BMI
+
+**Research Question**: Is neuron cell density (M/g) associated with BMI?
+
+**Hypotheses**:
+
+-   **Null Hypothesis (H0)**: There is no correlation between neuron cell density with BMI.
+
+-   **Alternate Hypothesis (H1)**: There is correlation between neuron cell density with BMI.
+
+As part of good data exploration, we should plot this association:
+
+```{r}
+plot(Alzheimers$neurons ~ Alzheimers$BMI, 
+     ylab = "Neuron cell density (m/g)", xlab = "BMI", las = 1)
+```
+
+#### Check statistical test assumptions
+
+For the Pearson's correlation there are a few assumptions:
+
+##### **Assumption 1**: Variables must be continuous - check using `str()`
+
+```{r}
+str(Alzheimers)
+```
+
+##### **Assumption 2**: Variables are approximately normally distributed - check using `hist()` and `qqnorm()`
+
+**IMPORTANT**: We must check each variable separately. Let's check neurons, then BMI:
+
+```{r}
+par(mfrow=c(1,2))
+
+hist(Alzheimers$neurons, main = "Histogram", 
+     xlab = "Neuron cell density (m/g)", las = 1)
+
+qqnorm(Alzheimers$neurons); qqline(Alzheimers$neurons)
+
+hist(Alzheimers$BMI, main = "Histogram", xlab = "BMI", las = 1)
+
+qqnorm(Alzheimers$BMI); qqline(Alzheimers$BMI)
+```
+
+Both look to be normally distributed
+
+##### **Assumption 3**: There should be a linear relationship between both variables - check by plotting the association:
+
+Let's start by plotting the data. 
+
+Then, we can add a line to the plot using the `abline()` function
+
+Specifically, the following `abline()` function adds a line of best fit to the model - technically its the result of a **linear model**, which is what the function `lm()` means. You will learn linear models next year:
+
+```{r}
+par(mfrow=c(1,1))
+
+plot(Alzheimers$neurons ~ Alzheimers$BMI, ylab = "Neuron cell density (m/g)", xlab = "BMI", las = 1)
+
+abline(lm(Alzheimers$neurons ~ Alzheimers$BMI), lwd = 2)
+```
+
+There does appear to be a consistent, linear pattern (it looks to have a negative correlation).
+
+##### **Assumption 4**: The data have no outliers - boxplots are good for this:
+
+```{r}
+par(mfrow=c(1,2))
+
+boxplot(Alzheimers$neurons, las = 1, ylab = "Neuron cell density (m/g)")
+
+boxplot(Alzheimers$BMI, las = 1, ylab = "BMI")
+```
+
+It looks like BMI may have some observations that at first glance could be considered outliers. Specifically there are two observations that the boxplot highlights as being particularly small, and one that is particularly high.
+
+Let's check what the values are for these observations:
+
+```{r}
+boxplot.stats(Alzheimers$BMI)
+```
+
+This shows us a few things:
+
+-   `$stats`: min, Q1 (25th percentile), median, Q3 (75th percentile), and max (excluding outliers)
+
+-   `$n`: The number of observations
+
+-   `$conf`: The 95% confidence interval for the median
+
+-   `$out`: The values identified as outliers
+
+So the apparent outliers have BMI values of 24.2, 18.3, and 17.7
+
+Let's check by looking at a reputable source if these are likely to be erroneous observations or are quite normal. For this we could look at the NHS: https://www.nhs.uk/common-health-questions/lifestyle/what-is-the-body-mass-index-bmi
+
+It turns out both BMI scores of 18.5 to 24.9 are in an ideal range.
+
+A BMI below 18.5 is classed as underweight; over 24.9 is overweight
+
+Check the range of our BMI values:
+
+```{r}
+range(Alzheimers$BMI)
+```
+
+The BMI range in our data is 17.7 to 24.2.
+
+We could also see our data using the `sort()` function:
+
+```{r}
+sort(Alzheimers$BMI)
+```
+
+The two smallest observations (17.7 and 18.3) would be considered mildly anorexic: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8837073
+
+Let's check which those observations are using the `which()` function:
+
+```{r}
+which(Alzheimers$BMI < 18.5)
+```
+
+These observations exist on rows 139 and 185:
+
+We could have a look at them:
+
+```{r}
+Alzheimers[c(139, 185), ]
+```
+
+Depending on the research question we were asking, these could be considered outliers:
+
+If we wanted to only examine patients with "healthy" BMI scores, we may wish to exclude these.
+
+Let's assume we want to do that (let's create a new subset with only healthy-BMI individuals):
+
+```{r}
+subAlz <- Alzheimers[Alzheimers$BMI > 18.5, ]
+```
+
+Technically we now need to check that our assumptions still hold with this subset, so let's repeat our checks for assumptions 1-4:
+
+```{r}
+str(subAlz) 
+par(mfrow=c(1,2)) 
+hist(subAlz$neurons, main = "Histogram", xlab = "Neuron cell density (m/g)", las = 1)
+qqnorm(subAlz$neurons); qqline(subAlz$neurons)
+hist(subAlz$BMI, main = "Histogram", xlab = "BMI", las = 1) 
+qqnorm(subAlz$BMI); qqline(subAlz$BMI) 
+par(mfrow=c(1,1)) 
+plot(subAlz$neurons ~ subAlz$BMI, ylab = "Neuron cell density (m/g)", xlab = "BMI", las = 1) 
+abline(lm(subAlz$neurons ~ subAlz$BMI), lwd = 2)
+par(mfrow=c(1,2))
+boxplot(subAlz$neurons, las = 1, ylab = "Neuron cell density (m/g)")
+boxplot(subAlz$BMI, las = 1, ylab = "BMI")
+```
+
+All assumptions 1-4 are met
+
+Let's look at the final assumption:
+
+##### **Assumption 5**: Your data must be independent (no one observation affects another)
+
+We don't need to do anything in R to check this assumption - we just need to know how the data were collected. In this case the data is simulated so we can **pretend** that each observation comes from a unique individual, and no individual was sampled more than once, hence our observations are entirely independent from one another. There is no **within-subject dependence**.
+
+## Perform the correlation analysis
+
+As you can see - there is a lot of work in checking the assumptions are met before we perform a statistical test!
+
+The reason this is so important is because if those assumptions are violated, the statistical test wont give you reliable results, and so you need to use a different test.
+
+We have checked all the assumptions of a Pearson's correlation are satisfied, so we can use this.
+
+Let's plot the data again so we can look at it alongside the output of the statistical test:
+
+```{r}
+plot(subAlz$neurons ~ subAlz$BMI, 
+     ylab = "Neuron cell density (m/g)", xlab = "BMI", las = 1)
+
+abline(lm(subAlz$neurons ~ subAlz$BMI), lwd = 2)
+
+cor.test(subAlz$neurons, subAlz$BMI, method = "pearson")
+```
+
+### Interpret the output
+
+The results from the Pearson’s correlation demonstrated a weak, negative correlation between Neuron cell density (million/gram) and BMI (r = -0.29 (95% CI: -0.41 to -0.15), t = -4.19, df = 196, p = 4.23e-5).
+
+### Non-Parametric Analysis: Spearman's correlation
+
+For this we will use the RespiratoryFlow data (from Practical Session 1)
+
+To import the data into R, we can use the `read.csv()` function, along with the `file.choose()` function:
+
+**NOTE**: This will open a new window on your device - navigate to the dataset that you have downloaded and select it:
+
+```{r}
+flowData <- read.csv(file.choose(), header = T, na.strings = "", stringsAsFactors = T)
+```
+
+## check the data
+
+```{r}
+names(flowData) 
+head(flowData) 
+tail(flowData) 
+str(flowData) 
+summary(flowData)
+```
+
+## Data exploration
+
+Let's start by assessing a simple association
+
+**Research Question**: Is weight (kg) associated with height (cm)?
+
+**Hypotheses**:
+
+-   **Null Hypothesis (H0):** There is no correlation between weight and height.
+
+-   **Alternate Hypothesis (H1):** There is a correlation between weight and height.
+
+We should start by plotting the association:
+
+```{r}
+plot(flowData$weight ~ flowData$height, ylab = "Height (cm)", xlab = "Weight (kg)", las = 1)
+```
+
+## Check assumptions
+
+##### Assumption 1: Both variables must be continuous (numeric) - check using `str()`
+
+```{r}
+str(flowData)
+```
+
+##### Assumption 2: Both variables are approximately normal - check using `hist()`, `qqnorm()`
+
+Check height:
+
+```{r}
+par(mfrow=c(1,2)) 
+hist(flowData$height, main = "Histogram", las = 1)
+qqnorm(flowData$height); qqline(flowData$height)
+```
+
+Looks like the largest value of height is ~ 2.1 m tall - this is unlikely to be an error or outlier but rather just a particularly tall person (e.g., a basketball player!)
+
+Let's check weight:
+
+```{r}
+hist(flowData$weight, main = "Histogram", las = 1)
+qqnorm(flowData$weight); qqline(flowData$weight)
+```
+
+Definitely does not look normal.
+
+In fact, as well as the distribution looking skewed, it looks like there is an outlier - someone is ~180 kg (28.3 stone).
+
+##### Assumption 3: There should be a linear relationship between both variables - check using `plot()`
+
+```{r}
+par(mfrow=c(1,1)) 
+plot(flowData$weight ~ flowData$height, 
+     ylab = "Weight (kg)", xlab = "Height (cm)", las = 1) 
+abline(lm(flowData$weight ~ flowData$height), lwd = 2)
+```
+
+##### Assumption 4: The data have no outliers - check using boxplot()
+
+```{r}
+par(mfrow=c(1,2))
+
+boxplot(flowData$height)
+
+boxplot(flowData$weight)
+```
+
+There certainly appear to be some outliers!
+
+##### Assumption 5: Your data must be independent (no one observation affects another)
+
+We know that these data are independent, because all the observations come from different people, so this assumption is satisfied.
+
+## Run an appropriate correlation analysis
+
+We have checked the assumptions of a Pearson's correlation and failed to satisfy the assumptions of normality and outliers.
+
+We would in theory have some other options to explore before ruling out parametric analysis altogether. For example, we could consider whether removal of outliers would be appropriate and we could consider **transforming** the weight variable using something like `log()` to see if the log(weight) is normally distributed. We will explore those ideas later.
+
+For now, let's assume we can't meet the assumptions of a parametric (Pearson's) correlation
+
+Hence, we need to run a Non-Parametric analysis (e.g., a Spearman's rank correlation)
+
+## Spearman's rank correlation
+
+Spearman's rank analysis looks at the **ranks** of the observations, rather than the raw values themselves.
+
+In fact, variables being **ranked** is the 1st assumption of the Spearman's rank correlation
+
+To understand ranks, let's first look at the raw data, e.g., for the height variable
+
+```{r}
+flowData$height
+```
+
+In fact it may be easier to look at these values when they are sorted from smallest to largest:
+
+```{r}
+sort(flowData$height)
+```
+
+So we can see that the shortest person is 147.0 cm (and note that there are two people of this height). The tallest person is 210.0 cm.
+
+Let's now look at the ranks of these observations:
+
+```{r}
+rank(sort(flowData$height))
+```
+
+
+We see that the observations are now ranked from smallest to largest. Importantly, because there are two values of the smallest height, rather than these be ranked "1" and "2", they have a shared rank of 1.5. This is known as a **tie** in the ranks.
+
+We can look at both the actual value of height and the rank together using `cbind()` (column bind):
+
+```{r}
+both <- cbind(sort(flowData$height), rank(sort(flowData$height)))
+
+head(both, 10) # Note the 10 here tells R to show me the first 10 rows
+
+```
+
+To exemplify this further to ensure you understand, let's look at a very small example:
+
+Imagine we had the actual observations of 1, 4, 10, 10, 15, and 20.
+
+```{r}
+obs <- c(1, 4, 10, 10, 15, 20)
+```
+
+If we rank these, we see that 1 is the smallest rank (1) and 20 is the highest (6). 10 occurs twice so rather than the first 10 get a rank of 3 and the second 10 get a rank of 4, these two 10s share the rank of 3.5:
+
+```{r}
+obs
+rank(obs)
+```
+
+As well as the data needing to be ranked, the Spearman's correlation has two other assumptions:
+
+##### 2. Observations are independent
+
+We already know that this is the case - all data come from different individuals
+
+###### 3. Relationship between variables is monotonic
+
+This means that monotonic relationship means that as one variable increases, the other always tends to go in a consistent direction (always up, or always down)
+
+We can see this when we plot the data, and importantly note that this assumption is about the raw data, not the ranked data:
+
+```{r}
+par(mfrow=c(1,1)) 
+plot(flowData$weight ~ flowData$height, 
+     ylab = "Weight (kg)", xlab = "Height (cm)", las = 1) 
+abline(lm(flowData$weight ~ flowData$height), lwd = 2)
+```
+
+So, we are confident that the assumptions for a Spearman's rank correlation analysis are met
+
+Let's now visualise this potential association and perform the analysis
+
+Remember we need to visualise the association **between the ranks**:
+
+```{r}
+par(mfrow=c(1,1))
+
+plot(rank(flowData$weight), rank(flowData$height), ylab = "Weight (kg)", xlab = "Height (cm)", las = 1)
+
+abline(lm(rank(flowData$weight) ~ rank(flowData$height)), lwd = 2)
+```
+
+**IMPORTANT**: When we perform the correlation analysis in R, we do not need to manually rank the variables i.e. we do not need to write for example `rank(flowData$weight)`
+
+This is because when we specify `method = "spearman"` in the `cor.test()` function, this tells R to rank the variables:
+
+```{r}
+cor.test(flowData$weight, flowData$height, method = "spearman")
+```
+
+The warning of ties simply tells us that there are several observations which share the same rank (we knew this already)
+
+In fact, when there are many ties, it's better to use the Kendall's tau correlation.
+
+Kendall's tau correlation also examines the association between ranks, and it is slightly more robust with small sample sizes or tied ranks. Kendall's tau correlation has **the same assumptions as Spearman's**, so we don't need to check those all over again!
+
+```{r}
+cor.test(flowData$weight, flowData$height, method = "kendall")
+```
+
+## Interpret the output
+
+The results from the Kendall’s tau correlation demonstrated a moderate, positive correlation between weight (kg) and height (cm) (tau = 0.5, z = 10.57, n = 210, p < 2.2e-16).
+
+### Alternative approaches when parametric assumptions are violated:
+
+I mentioned earlier that rather than immediately having to use a non-parametric test when parametric assumptions are violated, we may actually have other options.
+
+In the `flowData` example above, the assumptions of normality and outliers were violated.
+
+Let's see if we can address those.
+
+Depending on your research question, it may be appropriate to remove the outlier in weight:
+
+Remember this was the observation of ~ 180 kg:
+
+```{r}
+boxplot(flowData$weight, las = 1, ylab = "Weight (kg)")
+```
+
+We could create a subset that retains only individuals whose weight is less than 120 kg:
+
+```{r}
+flowSub <- subset(flowData, flowData$weight < 120)
+```
+
+Let's now plot the association:
+
+```{r}
+plot(flowSub$weight ~ flowSub$height, las = 1, 
+     ylab = "Weight (kg)", xlab = "Height (cm)")
+```
+
+It no longer looks like there are any obvious outliers.
+
+What about normality?
+
+```{r}
+par(mfrow=c(2,2)) 
+
+hist(flowSub$height, main = "Histogram", xlab = "Height (cm)")
+qqnorm(flowSub$height); qqline(flowSub$height)
+
+hist(flowSub$weight, main = "Histogram", xlab = "Weight (kg)")
+qqnorm(flowSub$weight); qqline(flowSub$weight)
+```
+
+Even with the outlier removed, the weight data still looks like it doesn't follow a normal distribution. So, let's see if we can transform the data:
+
+Let's try taking the log of weight:
+
+```{r}
+flowSub$logWt <- log(flowSub$weight) 
+
+par(mfrow=c(1,2)) 
+
+hist(flowSub$logWt, main = "Histogram", xlab = "log Weight (kg)")
+
+qqnorm(flowSub$logWt); qqline(flowSub$logWt)
+```
+
+This now looks much more like it follows a normal distribution!
+
+Now, all assumptions are satisfied to perform a more powerful, parametric test.
+
+Let's plot the data, and perform the test:
+
+```{r}
+par(mfrow=c(1,1)) 
+
+plot(flowSub$logWt ~ flowSub$height, ylab = "log Weight (kg)", xlab = "Height (cm)", las = 1) 
+
+abline(lm(flowSub$logWt ~ flowSub$height), lwd = 2)
+
+cor.test(flowSub$logWt, flowSub$height, method = "pearson")
+```
+
+Whatever you decide to do - you just need to be transparent and provide appropriate justification for the decisions you make!
+
+## Interpreting this output:
+
+Note that now our result represents the association between height and the log of weight. Hence when we come to write up our results we have to be clear about that:
+
+The results from the Pearson’s correlation demonstrated a strong, positive correlation between height (cm) and the log of weight (kg) (r = 0.70 (95% CI: 0.62 to 0.76), t = 14.02, df = 207, p < 2.2e-16).
+
+# TASKS
+
+::: {.callout-note collapse="true"}
+## Task 1
+
+Write up the result for the Pearson's correlation between log Weight and Height:
+
+:::
+
+
+
+::: {.callout-note collapse="true"}
+## Task 2
+
+Run the following code:
+
+```{r}
+set.seed(1) 
+storks <- round(rnorm(100, 8, 1), 0) 
+babies <- round(((3 * storks) + 10) + rnorm(100, 0, 1), 0)
+```
+
+Now write the code to perform an **appropriate** correlation analysis to examine if there is an association between storks and babies.
+
+Remember to explore the data thoroughly and check any assumptions are met
+:::
+
+::: {.callout-note collapse="true"}
+## Task 3
+
+Write up the results for your correlation analysis of storks and babies
+:::
+
+
+# Bonus:
+
+Note that for some analyses R can actually write up results in prose for you!
+
+For example, the `report` package provides functions to report statistical tests.
+
+Specifically, the `report()` function can be used to report correlation analyses:
+
+Install and load the package:
+
+```{r}
+install.packages("report", repos = "https://cloud.r-project.org/")
+
+library(report)
+```
+
+Perform the correlation test and save the output of the test in an object:
+
+```{r}
+cor_result <- cor.test(flowSub$logWt, flowSub$height, method = "pearson")
+```
+
+Use `report()` to get R to report the correlation for you!
+
+```{r}
+report(cor_result)
+```
+
+**IMPORTANT**: You must always check that this has written something sensible! Do not simply rely on this output without checking!
