@@ -3,12 +3,6 @@ title: "BI1001 Biostatistics Practicals"
 format: html
 ---
 
-This site contains all the practicals for BI1001 Biostatistics. 
-
-Click on a practical below to get started:
-
-## 🧪 Practicals
-
 - <a href="Practical%201%20-%20Basics%20of%20R.html" target="_blank">Practical 1 – Basics of R</a>
 - <a href="Practical%201%20-%20Exploring%20data%20and%20graphing.html" target="_blank">Practical 1 – Exploring data and graphing</a>
 - <a href="Practical%202%20-%20Experimental%20design.html" target="_blank">Practical 2 – Experimental design</a>
