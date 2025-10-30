@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dr William Kay">
+<meta name="dcterms.date" content="2025-10-30">
+
+<title>Practical 4 - Group comparisons – BI1001 Biostatistics Practicals</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-1d4f84655f446305ac42a8f1abcf7405.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">BI1001 Biostatistics Practicals</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Practical 1 - Basics of R.html"> 
+<span class="menu-text">Practical 1 - Basics of R</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Practical 1 - Exploring data and graphing.html"> 
+<span class="menu-text">Practical 1 - Exploring data and graphing</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Practical 2 - Experimental design.html"> 
+<span class="menu-text">Practical 2 - Experimental design</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Practical 2 - Correlation analysis.html"> 
+<span class="menu-text">Practical 2 - Correlation analysis</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./Practical 4 - Group comparisons.html" aria-current="page"> 
+<span class="menu-text">Practical 4 - Group comparisons</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Practical 5 - Analysing count data.html"> 
+<span class="menu-text">Practical 5 - Analysing count data</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Practical 4 - Group comparisons</h1>
+<p class="subtitle lead">Testing for differences between groups</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Dr William Kay </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 30, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="learning-outcomes-los" class="level1">
+<h1>Learning Outcomes (LOs)</h1>
+<p>Here’s what you should know and be able to do after completing this practical:</p>
+<ul>
+<li><p>LO1: Recall the typical assumptions of t-tests</p></li>
+<li><p>LO2: Explain the purpose of data transformation</p></li>
+<li><p>LO3: Explain dependence and independence in data</p></li>
+<li><p>LO4: Implement t-tests in R</p></li>
+<li><p>LO5: Interpret and report the output of t-tests</p></li>
+<li><p>LO6: Implement non-parametric equivalents</p></li>
+<li><p>LO7: Interpret and report the output of non-parametric equivalents</p></li>
+</ul>
+</section>
+<section id="tutorial" class="level1">
+<h1>Tutorial</h1>
+<section id="two-sample-t-test" class="level3">
+<h3 class="anchored" data-anchor-id="two-sample-t-test">two-sample t-test</h3>
+<p>For this tutorial, we’ll work with the “sealDispersal.csv” dataset</p>
+<p>This dataset contains data on grey seal (Halichoerus grypus) pups</p>
+<p>Specifically, the data represent how far seals travelled (km) when they undertook natal dispersal</p>
+<p>This is their “displacement distance”, named “dist” in the spreadsheet</p>
+<p>Start by importing the data:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>seals <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">file.choose</span>(), <span class="at">header =</span> T, <span class="at">stringsAsFactors =</span> T, <span class="at">na.strings =</span> <span class="st">"NA"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Take an initial look at the data:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(seals) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "id"     "sex"    "age"    "censor" "colony" "dist"  </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(seals)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    id  sex age censor colony dist
+1 1275 &lt;NA&gt;   5  alive ramsey 0.00
+2 1104    M   1   dead ramsey 2.16
+3 1105    F   1  alive ramsey 0.00
+4 1121    F   6  alive skomer 0.00
+5 1185    M   1  alive skomer 1.38
+6 1122    M   8  alive skomer 0.00</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(seals)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      id sex age censor colony      dist
+181 1929   F  21   dead ramsey 141.10431
+182 1932   F   1  alive ramsey   0.00000
+183 1937   M   3  alive ramsey   0.00000
+184 1978   M   7  alive ramsey   0.00000
+185 1960   M  30   dead ramsey   3.96155
+186 1963   F   9  alive ramsey  16.07533</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(seals) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   186 obs. of  6 variables:
+ $ id    : int  1275 1104 1105 1121 1185 1122 1119 1120 1135 1136 ...
+ $ sex   : Factor w/ 2 levels "F","M": NA 2 1 1 2 2 2 2 1 1 ...
+ $ age   : int  5 1 1 6 1 8 4 3 2 2 ...
+ $ censor: Factor w/ 2 levels "alive","dead": 1 2 1 1 1 1 1 1 1 1 ...
+ $ colony: Factor w/ 3 levels "npembs","ramsey",..: 2 2 2 3 3 3 3 3 3 3 ...
+ $ dist  : num  0 2.16 0 0 1.38 0 0 0 1.52 1.52 ...</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(seals)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       id         sex          age           censor       colony   
+ Min.   :1060   F   :99   Min.   : 1.000   alive:144   npembs: 24  
+ 1st Qu.:1300   M   :85   1st Qu.: 2.000   dead : 40   ramsey:128  
+ Median :1478   NA's: 2   Median : 4.000   NA's :  2   skomer: 34  
+ Mean   :1511             Mean   : 6.145                           
+ 3rd Qu.:1749             3rd Qu.: 8.000                           
+ Max.   :1978             Max.   :42.000                           
+      dist       
+ Min.   :  0.00  
+ 1st Qu.:  0.00  
+ Median :  0.00  
+ Mean   : 43.94  
+ 3rd Qu.: 19.92  
+ Max.   :964.30  </code></pre>
+</div>
+</div>
+</section>
+<section id="data-exploration" class="level3">
+<h3 class="anchored" data-anchor-id="data-exploration">Data exploration</h3>
+<p>We may be interested to see if there is a difference in dispersal distance between male and female seal pups. In theory, we may not expect there to be because although as adults, grey seals are sexually dimorphic, as pups they aren’t, meaning that both males and females are very similar in size. When it comes to distance travelled, size matters - larger animals can typically travel further. This is known as “allometric scaling” in biology, see here for an example: https://royalsocietypublishing.org/doi/full/10.1098/rsbl.2015.0673</p>
+<p>Our <strong>research question</strong> would hence be something like:</p>
+<p>Does natal dispersal distance vary between male and female grey seal pups?</p>
+<p>Let’s state some <strong>hypotheses</strong>:</p>
+<p><strong>Null hypothesis</strong>: There is no difference in natal dispersal distance between male and female pups</p>
+<p><strong>Alternate hypothesis</strong>: There is a difference in natal dispersal distance between male and female pups</p>
+<p>Note that in this case the alternative hypothesis is not that one sex specifically travels further than the other, it’s just that there is a difference in distance travelled. To analyse this “two-tailed” question, we need a two-tailed test.</p>
+<p>As usual, we should should start by plotting our data:</p>
+<p><strong>NOTE</strong> that when x is categorical, R by default knows to create a boxplot using the <code>plot()</code>function:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(seals<span class="sc">$</span>dist <span class="sc">~</span> seals<span class="sc">$</span>sex, <span class="at">ylab =</span> <span class="st">"Displacement distance (km)"</span>, <span class="at">xlab =</span> <span class="st">"Sex"</span>, <span class="at">las =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can explicitly ask for a <code>boxplot()</code> if we want to:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(seals<span class="sc">$</span>dist <span class="sc">~</span> seals<span class="sc">$</span>sex, <span class="at">ylab =</span> <span class="st">"Displacement distance (km)"</span>, <span class="at">xlab =</span> <span class="st">"Sex"</span>, <span class="at">las =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can see clearly from this that the majority of animals disperse a relatively short distance but there are a few that disperse a particularly long distance</p>
+<p>Let’s see how far the animals disperse:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(seals<span class="sc">$</span>dist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1]   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+  [8]   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+ [15]   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+ [22]   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+ [29]   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+ [36]   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+ [43]   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+ [50]   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+ [57]   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+ [64]   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+ [71]   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+ [78]   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+ [85]   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+ [92]   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+ [99]   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+[106]   0.00000   0.00000   0.16800   0.22800   0.71900   1.38000   1.41000
+[113]   1.52000   1.52000   1.52000   1.52000   1.73000   2.16000   3.17000
+[120]   3.37000   3.96000   3.96155   4.02000   4.21000   4.57000   4.86000
+[127]   6.04000  12.93969  13.49606  15.01505  15.35200  15.38363  15.71496
+[134]  16.07533  16.71319  16.78301  17.19455  17.44276  17.84845  20.60682
+[141]  20.60682  21.12559  33.92554  36.11548  39.92171  40.64138  44.38348
+[148]  53.14825  53.92034  54.84184  60.78953  64.53057  66.55368  78.21101
+[155]  81.85702  84.56023  86.31815  86.70399  88.47641  93.56456  93.74547
+[162]  97.30561 108.00707 110.96095 117.44083 119.92788 137.21080 141.10431
+[169] 163.67832 184.43662 185.15203 185.87670 190.33015 224.41939 227.77765
+[176] 233.98984 237.08918 261.17109 261.99485 292.04437 342.87248 392.43563
+[183] 456.22910 460.90529 529.76928 964.30412</code></pre>
+</div>
+</div>
+<p>Ah! Many of them have not dispersed at all; their dispersal distance is 0 km.</p>
+<p>Given this, we may need to refine our research question. We may be specifically interested in only seals who have undertaken natal dispersal (i.e., moved from their birth site).</p>
+<p>If we want to examine this, then we need to perform some subsetting to exclude any individuals who did not disperse.</p>
+<p>One way to do that would be like this:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>sealSub <span class="ot">&lt;-</span> seals[seals<span class="sc">$</span>dist <span class="sc">&gt;</span> <span class="dv">0</span>, ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now plot the data again:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(sealSub<span class="sc">$</span>dist <span class="sc">~</span> sealSub<span class="sc">$</span>sex, <span class="at">ylab =</span> <span class="st">"Displacement distance (km)"</span>, <span class="at">xlab =</span> <span class="st">"Sex"</span>, <span class="at">las =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can still see that most individuals dispersed a relatively short distance, with a few individuals from each sex dispersing extreme distances i.e., there are some outliers. However, these distances aren’t likely to represent errors - grey seal pups can disperse very long distances. Here’s some evidence of that: https://academic.oup.com/icesjms/article/77/5/1762/5824890</p>
+<p>So, we shouldn’t rush to exclude these outliers. Let’s leave them in for now.</p>
+<p>We can also see already from this boxplot that, on average, it appears there is not much difference between sexes in how far the seals dispersed.</p>
+</section>
+<section id="check-assumptions-of-a-t-test" class="level3">
+<h3 class="anchored" data-anchor-id="check-assumptions-of-a-t-test">Check assumptions of a t-test:</h3>
+<section id="assumption-1-y-must-be-continuous-numeric-and-x-must-be-categorical-factor---check-using-str" class="level5">
+<h5 class="anchored" data-anchor-id="assumption-1-y-must-be-continuous-numeric-and-x-must-be-categorical-factor---check-using-str">Assumption 1: y must be continuous (numeric) and x must be categorical (factor) - check using <code>str()</code></h5>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(sealSub)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   79 obs. of  6 variables:
+ $ id    : int  1104 1185 1135 1136 1137 1138 1168 1175 1183 1242 ...
+ $ sex   : Factor w/ 2 levels "F","M": 2 2 1 1 2 1 1 2 2 1 ...
+ $ age   : int  1 1 2 2 7 4 7 4 16 24 ...
+ $ censor: Factor w/ 2 levels "alive","dead": 2 1 1 1 1 1 1 2 1 1 ...
+ $ colony: Factor w/ 3 levels "npembs","ramsey",..: 2 3 3 3 3 2 2 2 3 2 ...
+ $ dist  : num  2.16 1.38 1.52 1.52 292.04 ...</code></pre>
+</div>
+</div>
+<p>This assumption is met.</p>
+</section>
+<section id="assumption-2-y-must-be-approximately-normally-distributed-for-each-group-check-using-hist-and-qqnorm" class="level5">
+<h5 class="anchored" data-anchor-id="assumption-2-y-must-be-approximately-normally-distributed-for-each-group-check-using-hist-and-qqnorm">Assumption 2: y must be approximately normally distributed for each group: check using <code>hist()</code> and <code>qqnorm()</code></h5>
+<p>Start with males:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sealSub<span class="sc">$</span>dist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"M"</span>], <span class="at">main =</span> <span class="st">"Histogram"</span>, <span class="at">las =</span> <span class="dv">1</span>, <span class="at">xlab =</span> <span class="st">"Dispersal distance (km)"</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(sealSub<span class="sc">$</span>dist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"M"</span>]); <span class="fu">qqline</span>(sealSub<span class="sc">$</span>dist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"M"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This definitely doesn’t look normal. The historgram does not look like a bell-shaped curve and the Q-Q plot shows an obvious curved pattern in the data.</p>
+<p>What about the females?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sealSub<span class="sc">$</span>dist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"F"</span>], <span class="at">main =</span> <span class="st">"Histogram"</span>, <span class="at">las =</span> <span class="dv">1</span>, <span class="at">xlab =</span> <span class="st">"Dispersal distance (km)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(sealSub<span class="sc">$</span>dist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"F"</span>]); <span class="fu">qqline</span>(sealSub<span class="sc">$</span>dist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"F"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-10-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Again, not normal.</p>
+<p>We could consider at this point switching to a non-parametric test, but remember that these tests have less <strong>Power</strong>, so if we can stick with the parametric test, we should.</p>
+<p>Let’s try performing a transformation of our data to see if it follows a normal distribution</p>
+<p>Start with a <code>log10</code> transformation:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>sealSub<span class="sc">$</span>logDist <span class="ot">&lt;-</span> <span class="fu">log10</span>(sealSub<span class="sc">$</span>dist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>And re-check normality assumption, starting with males:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sealSub<span class="sc">$</span>logDist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"M"</span>], <span class="at">main =</span> <span class="st">"Histogram"</span>, <span class="at">las =</span> <span class="dv">1</span>, <span class="at">xlab =</span> <span class="st">"log10 dispersal distance (km)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(sealSub<span class="sc">$</span>logDist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"M"</span>], <span class="at">las =</span> <span class="dv">1</span>); <span class="fu">qqline</span>(sealSub<span class="sc">$</span>logDist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"M"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-12-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This now looks approximately normal (the Q-Q plot looks particularly close to normal)</p>
+<p>And how about for female seals:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sealSub<span class="sc">$</span>logDist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"F"</span>], <span class="at">main =</span> <span class="st">"Histogram"</span>, <span class="at">las =</span> <span class="dv">1</span>, <span class="at">xlab =</span> <span class="st">"log10 dispersal distance (km)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(sealSub<span class="sc">$</span>logDist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"F"</span>], <span class="at">las =</span> <span class="dv">1</span>); <span class="fu">qqline</span>(sealSub<span class="sc">$</span>logDist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"F"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-13-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Again, this isn’t perfect, but it’s very close to normal, hence approximately normal</p>
+<p>So, we have now met Assumption 2.</p>
+</section>
+<section id="assumption-3-there-should-be-no-significant-outliers" class="level5">
+<h5 class="anchored" data-anchor-id="assumption-3-there-should-be-no-significant-outliers">Assumption 3: There should be no significant outliers</h5>
+<p>From this point on, we need to continue evaluating the <code>log10</code> distances</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(sealSub<span class="sc">$</span>logDist <span class="sc">~</span> sealSub<span class="sc">$</span>sex, <span class="at">ylab =</span> <span class="st">"log10 displacement distance (km)"</span>, <span class="at">xlab =</span> <span class="st">"Sex"</span>, <span class="at">las =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>No outliers on a log10 scale.</p>
+</section>
+</section>
+<section id="data-transformations" class="level3">
+<h3 class="anchored" data-anchor-id="data-transformations">Data transformations:</h3>
+<p>This might be a good opportunity to explain what is happening when we transform data.</p>
+<p>A data transformation doesn’t change the data itself — it just changes the scale we use to view it. Think of it like switching from measuring distance in metres to kilometres: the numbers look different, but the underlying reality is the same. The log10 transformation works similarly, except it’s useful when changes happen by orders of magnitude rather than by equal steps.</p>
+<p>An example could be dosages of painkillers, like paracetamol. If you take 1 mg of paracetamol, you probably won’t feel a benefit. Doubling it to 2 mg or 3 mg won’t help much either — but increasing it to 10 mg might. The drug’s effect becomes noticeable when the dose increases by a factor of 10, not by 1 mg at a time. On a log10 scale, going from 1 mg to 10 mg to 100 mg becomes 1 to 2 to 3 — now the pattern of meaningful change is clearer. Transformations like log10 simply rescale the data so that the underlying relationships become easier to interpret.</p>
+<p>The reason the log10 transformation is a good one for seal displacement distance is because displacement distance often spans orders of magnitude: some pups move only a few kilometres, while others travel hundreds. On the raw scale, those long-distance movers look like extreme outliers, stretching the distribution to the right and making it skewed. But biologically, these aren’t really “outliers” — they just reflect multiplicative rather than additive variation (e.g.&nbsp;some pups move 10x or 100x farther than others). Taking the log10 compresses those large distances so that multiplicative differences (x10, x100) become additive ones (+1, +2), making the distribution symmetric and roughly normal. In short, the log10 scale reflects how dispersal actually varies — proportionally or exponentially — rather than linearly.</p>
+<p>A transformation like log10 doesn’t change the information in the data — it changes the scale we use to express it. The relationships, ranks, and ratios between values are preserved, just represented differently. For example, 10 km is still 10x farther than 1 km whether you express it as 10 vs.&nbsp;1 (raw) or 1 vs.&nbsp;0 (log10). What changes is how we see the pattern: on the raw scale, extreme values dominate; on the log scale, differences in orders of magnitude become evenly spaced. So you’re not altering the truth of the data — you’re translating it into a scale that better matches how the phenomenon behaves.</p>
+<p>This is the same reason why pH is measured on a log10 scale.</p>
+<p>Acidity is based on the concentration of hydrogen ions (H⁺) in a solution, which can vary over many orders of magnitude — from about 1 mole per litre in strong acid to 0.000000001 moles per litre in strong alkaline Representing those values on a raw scale would be messy and unintuitive (e.g.&nbsp;1 vs.&nbsp;0.000000001). So instead, we use a log10 scale to compress that huge range into something manageable and evenly spaced. pH is defined as <span class="math inline">\(pH = -\log_{10}[H^+]\)</span>, meaning each step on the pH scale represents a tenfold change in acidity. A solution with pH 3 is ten times more acidic than pH 4, and 100 times more acidic than pH 5. In other words, the log scale doesn’t change the underlying chemistry — it just expresses it in a scale that reflects how acidity actually varies (by factors of ten) and makes it easier to interpret.</p>
+</section>
+<section id="back-to-the-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="back-to-the-analysis">Back to the analysis!</h3>
+<p>Let’s now check the fourth assumption of a t-test.</p>
+<section id="assumption-4-the-groups-should-have-equal-variance." class="level5">
+<h5 class="anchored" data-anchor-id="assumption-4-the-groups-should-have-equal-variance.">Assumption 4: The groups should have equal variance.</h5>
+<p>There are a few ways to check this. First, let’s simply plot our data:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(sealSub<span class="sc">$</span>logDist <span class="sc">~</span> sealSub<span class="sc">$</span>sex, <span class="at">las =</span> <span class="dv">1</span>, <span class="at">xlab =</span> <span class="st">"Sex"</span>, <span class="at">ylab =</span> <span class="st">"log10 dispersal distance (km)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>If it looks like the boxes and whiskers are as wide in each sex, then that would suggest that the groups have equal variance.</p>
+<p>We can also of course, calculate the variance for each group:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(sealSub<span class="sc">$</span>logDist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"M"</span>], <span class="at">na.rm =</span> T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7280954</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(sealSub<span class="sc">$</span>logDist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"F"</span>], <span class="at">na.rm =</span> T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7352134</code></pre>
+</div>
+</div>
+<p>Looks almost exactly equal.</p>
+<p>We could also calculate the ratio of variance.</p>
+<p>This is simply one variance divided by the other. The answer should be close to 1 if they are equal (i.e.&nbsp;a 1:1 ratio):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(sealSub<span class="sc">$</span>logDist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"M"</span>], <span class="at">na.rm =</span> T) <span class="sc">/</span> <span class="fu">var</span>(sealSub<span class="sc">$</span>logDist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"F"</span>], <span class="at">na.rm =</span> T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9903185</code></pre>
+</div>
+</div>
+<p>Looks like these two groups have almost identical variance.</p>
+<p>If we want to be even more confident that this is the case, we could conduct a variance test.</p>
+<p>Note that the only assumptions of a variance test are that the data are independent, continuous, and normal. We know already from earlier checks that all three of these assumptions are met.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var.test</span>(sealSub<span class="sc">$</span>logDist <span class="sc">~</span> sealSub<span class="sc">$</span>sex)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    F test to compare two variances
+
+data:  sealSub$logDist by sealSub$sex
+F = 1.0098, num df = 42, denom df = 34, p-value = 0.9855
+alternative hypothesis: true ratio of variances is not equal to 1
+95 percent confidence interval:
+ 0.521631 1.911454
+sample estimates:
+ratio of variances 
+          1.009776 </code></pre>
+</div>
+</div>
+<p>For a variance test, the null hypothesis is that the groups have equal variance</p>
+<p>Hence if we got a p-value &lt; 0.05 we would reject that null hypothesis.</p>
+<p>On the contrary, if our groups do have equal variance we would get p &gt; 0.05</p>
+<p>That’s what we have here, so this assumption is satisfied.</p>
+</section>
+<section id="assumption-5-your-data-must-be-independent-no-one-observation-affects-another" class="level5">
+<h5 class="anchored" data-anchor-id="assumption-5-your-data-must-be-independent-no-one-observation-affects-another">Assumption 5: Your data must be independent (no one observation affects another)</h5>
+<p>We don’t need to test this in R — it’s about understanding how the data were collected and the biology of the system. In this case, it’s reasonable to assume that one animal’s dispersal distance doesn’t directly affect another’s.</p>
+</section>
+</section>
+<section id="implement-the-t-test" class="level3">
+<h3 class="anchored" data-anchor-id="implement-the-t-test">Implement the t-test:</h3>
+<p>All assumptions have been checked, so we can run a parametric analysis.</p>
+<p><strong>NOTE</strong>: In R, the t-test function is simply <code>t.test()</code></p>
+<p>There are a couple of important arguments to specify:</p>
+<ul>
+<li><p><code>var.equal = TRUE</code> - Set this to TRUE if the variances are equal between the groups (they are here). By default, <code>t.test()</code> assumes unequal variances and performs a Welch’s t-test if not specified.</p></li>
+<li><p><code>alternative = "two.sided"</code> - This specifies a two-tailed test.We are testing for any difference between male and female seals, without predicting which group has the higher dispersal distance.</p></li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(logDist <span class="sc">~</span> sex, <span class="at">data =</span> sealSub, <span class="at">var.equal =</span> <span class="cn">TRUE</span>, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Two Sample t-test
+
+data:  logDist by sex
+t = 0.053474, df = 76, p-value = 0.9575
+alternative hypothesis: true difference in means between group F and group M is not equal to 0
+95 percent confidence interval:
+ -0.3775214  0.3983525
+sample estimates:
+mean in group F mean in group M 
+       1.485623        1.475208 </code></pre>
+</div>
+</div>
+</section>
+<section id="interpret-and-report-the-output" class="level3">
+<h3 class="anchored" data-anchor-id="interpret-and-report-the-output">Interpret and report the output:</h3>
+<p>We can see from this output that the mean (log10) dispersal distance for females is 1.465623 km, and for males it is 1.474208 km. This test output doesn’t tell us explicitly what the difference is between these two numbers, so we must calculate it manually:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>meanM <span class="ot">&lt;-</span> <span class="fu">mean</span>(sealSub<span class="sc">$</span>logDist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"M"</span>], <span class="at">na.rm =</span> T)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>meanF <span class="ot">&lt;-</span> <span class="fu">mean</span>(sealSub<span class="sc">$</span>logDist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"F"</span>], <span class="at">na.rm =</span> T)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abs</span>(meanM <span class="sc">-</span> meanF)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0104156</code></pre>
+</div>
+</div>
+<p>Note we use the function <code>abs()</code> to determine the absolute difference (i.e.&nbsp;regardless of whether that number is positive or negative, we are just interested in its magnitude) in log10 km. We should also calculate the standard error of each of these estimated means.</p>
+<p>If you don’t remember what standard error is, look back at the “Basics in R” script.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>std.error <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">sd</span>(x, <span class="at">na.rm=</span>T)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">length</span>(x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Males then females:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">std.error</span>(sealSub<span class="sc">$</span>logDist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"M"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1422142</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">std.error</span>(sealSub<span class="sc">$</span>logDist[sealSub<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"F"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1292648</code></pre>
+</div>
+</div>
+<p>Now that we have these values, we can, together with the output from the t.test(), write up our result:</p>
+<p>Our two-tailed, two-sample t-test indicated that there was no difference in the mean dispersal distance (log10 km) between male and female grey seal pups (t = 0.05, df = 76, p = 0.96). Specifically, the mean ± SE (log10 km) dispersal distance for males was 1.47 ± 0.14, whilst for females it was 1.49 ± 0.13, representing a difference of 0.02 (95% CI: -0.38 to 0.40; log10 km).</p>
+</section>
+<section id="two-tailed-one-sample-t-test" class="level2">
+<h2 class="anchored" data-anchor-id="two-tailed-one-sample-t-test">Two-tailed, One-sample t-test</h2>
+<p>Now let’s look at a one-sample t-test. Remember, this is a t-test that takes one group of data and compares it to a known or theoretical value.</p>
+<p>Let’s assume that previous research has indicated that seals disperse an average (mean) distance (on a log10 km scale) of 1.5.</p>
+<p>We could use a one-sample t-test here to test whether the mean dispersal distance of our sample of pups differs to this “known” value.</p>
+<p>In a one-sample t-test, the null hypothesis is that the sample mean is equal to the known or hypothesized mean. The alternative hypothesis is that the two are different.</p>
+<p>Let’s create an object that stores the “known” value from previous research:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>knownVal <span class="ot">&lt;-</span> <span class="fl">1.5</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>For a one-sample t-test, the only assumptions are that the observations in your sample are continuous, independent, and approximately normally distributed.</p>
+<p>In the previous test we looked at each sex separately, but in this research question we aren’t looking to distinguish between sex, so we can look at all seals together.</p>
+<p>However, this does mean we need to check whether when we look at all of the seals together the log10 dispersal distance is still approximately normally distributed:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sealSub<span class="sc">$</span>logDist, <span class="at">main =</span> <span class="st">"Histogram"</span>, <span class="at">las =</span> <span class="dv">1</span>)</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(sealSub<span class="sc">$</span>logDist, <span class="at">las =</span> <span class="dv">1</span>); <span class="fu">qqline</span>(sealSub<span class="sc">$</span>logDist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It looks approximately normal.</p>
+<p>Let’s visualise our sample against the known value:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(sealSub<span class="sc">$</span>logDist, knownVal, <span class="at">ylab =</span> <span class="st">"log10 displacement distance (km)"</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"Sample"</span>, <span class="st">"Known value"</span>), <span class="at">las =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>And now let’s conduct the one-sample t-test.</p>
+<p>Note that the function for this is the same as previously i.e., <code>t.test()</code>, but this time we need to specify a value for something called <code>mu</code>.</p>
+<p><code>mu</code> represents the known (or hypothesized) value that you are comparing your sample to.</p>
+<p>Remember also that in this case our sample consists of only a single group. So we don’t need to worry about setting <code>var.equal = TRUE</code>, because we aren’t comparing two groups - we are simply comparing one group to a known or theoretical value (mu).</p>
+<p>We leave <code>alternative = "two.sided"</code> because we aren’t concerned with whether mu is larger than the sample, or vice versa:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(sealSub<span class="sc">$</span>logDist, <span class="at">mu =</span> knownVal, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  sealSub$logDist
+t = -0.23945, df = 78, p-value = 0.8114
+alternative hypothesis: true mean is not equal to 1.5
+95 percent confidence interval:
+ 1.287913 1.666546
+sample estimates:
+mean of x 
+  1.47723 </code></pre>
+</div>
+</div>
+<p>In this case, our p-value is greater than 0.05, so we fail to reject the null hypothesis (i.e.&nbsp;we stick with it).</p>
+<p>In other words, the mean dispersal distance in our sample of grey seal pups appears to be consistent with the mean distance found in previous research.</p>
+<p>Here’s how we could report this result:</p>
+<p>A one-sample t-test was used to determine whether the mean log10 dispersal distance of grey seal pups differed from a previously reported mean of 1.5 log10 km. The test indicated no significant difference (t = -0.24, df = 78, p = 0.81). The mean log10 dispersal distance in our sample was 1.48 (95% CI: 1.29 to 1.67), suggesting that the dispersal distances in our sample are consistent with previous research.</p>
+<section id="welchs-t-test" class="level3">
+<h3 class="anchored" data-anchor-id="welchs-t-test">Welch’s t-test:</h3>
+<p>The Welch’s t-test is a two-sample t-test used when variances are unequal.</p>
+<p>For this example, we’re going to use some simulated Alzheimer’s data again:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>Alzheimers <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">neurons =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">20</span>, <span class="dv">2</span>), <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">21</span>, <span class="dv">6</span>)), <span class="at">group =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Asymptomatic"</span>,<span class="st">"Symptomatic"</span>), <span class="at">each =</span> <span class="dv">100</span>), <span class="at">sex =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"M"</span>, <span class="dv">50</span>), <span class="fu">rep</span>(<span class="st">"M"</span>, <span class="dv">50</span>), <span class="fu">rep</span>(<span class="st">"F"</span>, <span class="dv">50</span>), <span class="fu">rep</span>(<span class="st">"F"</span>, <span class="dv">50</span>)), <span class="at">age =</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="dv">200</span>, <span class="dv">70</span>, <span class="dv">5</span>), <span class="dv">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We want to see if there is a difference in neuron cell density between symptomatic and asymptomatic patients:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(neurons <span class="sc">~</span> group, <span class="at">data =</span> Alzheimers, <span class="at">xlab =</span> <span class="st">"Patient group"</span>, <span class="at">ylab =</span> <span class="st">"Neuron cell density (M/g)"</span>, <span class="at">las =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Remember to check assumptions:</p>
+<section id="assumption-1-data-are-continuous---we-know-thats-the-case." class="level5">
+<h5 class="anchored" data-anchor-id="assumption-1-data-are-continuous---we-know-thats-the-case.">Assumption 1: Data are continuous - we know that’s the case.</h5>
+</section>
+<section id="assumption-2-data-are-approximately-normal-in-each-group.-check-with-visualisations" class="level5">
+<h5 class="anchored" data-anchor-id="assumption-2-data-are-approximately-normal-in-each-group.-check-with-visualisations">Assumption 2: Data are approximately normal in each group. Check with visualisations:</h5>
+<p>Check asymptomatic patients:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Alzheimers<span class="sc">$</span>neurons[Alzheimers<span class="sc">$</span>group<span class="sc">==</span><span class="st">"Asymptomatic"</span>], <span class="at">main =</span> <span class="st">"Asymptomatic"</span>, <span class="at">las =</span> <span class="dv">1</span>, <span class="at">xlab =</span> <span class="st">"Neuron cell density (M/g)"</span>)</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(Alzheimers<span class="sc">$</span>neurons[Alzheimers<span class="sc">$</span>group<span class="sc">==</span><span class="st">"Asymptomatic"</span>], <span class="at">las =</span> <span class="dv">1</span>)</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(Alzheimers<span class="sc">$</span>neurons[Alzheimers<span class="sc">$</span>group<span class="sc">==</span><span class="st">"Asymptomatic"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Check symptomatic patients:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Alzheimers<span class="sc">$</span>neurons[Alzheimers<span class="sc">$</span>group<span class="sc">==</span><span class="st">"Symptomatic"</span>], <span class="at">main =</span> <span class="st">"Symptomatic"</span>, <span class="at">las =</span> <span class="dv">1</span>, <span class="at">xlab =</span> <span class="st">"Neuron cell density (M/g)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(Alzheimers<span class="sc">$</span>neurons[Alzheimers<span class="sc">$</span>group<span class="sc">==</span><span class="st">"Symptomatic"</span>], <span class="at">las =</span> <span class="dv">1</span>)</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(Alzheimers<span class="sc">$</span>neurons[Alzheimers<span class="sc">$</span>group<span class="sc">==</span><span class="st">"Symptomatic"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-30-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The data appear normal. Let’s check next for outliers:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Alzheimers<span class="sc">$</span>neurons <span class="sc">~</span> Alzheimers<span class="sc">$</span>group, <span class="at">las =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">"Neuron cell density (M/g)"</span>, <span class="at">xlab =</span> <span class="st">"Patient group"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>No obvious outliers to consider.</p>
+<p>Are the variances equal? From the boxplot it looks like they aren’t!</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(Alzheimers<span class="sc">$</span>neurons[Alzheimers<span class="sc">$</span>group<span class="sc">==</span><span class="st">"Asymptomatic"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.574251</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(Alzheimers<span class="sc">$</span>neurons[Alzheimers<span class="sc">$</span>group<span class="sc">==</span><span class="st">"Symptomatic"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 39.40252</code></pre>
+</div>
+</div>
+<p>The symptomatic group have more than 10 times the variance that the asymptomatic group has!</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var.test</span>(neurons <span class="sc">~</span> group, <span class="at">data =</span> Alzheimers)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    F test to compare two variances
+
+data:  neurons by group
+F = 0.090711, num df = 99, denom df = 99, p-value &lt; 2.2e-16
+alternative hypothesis: true ratio of variances is not equal to 1
+95 percent confidence interval:
+ 0.06103429 0.13481809
+sample estimates:
+ratio of variances 
+        0.09071123 </code></pre>
+</div>
+</div>
+<p>And the variance test indicates the variances are significantly different (the p-value here is extremely small).</p>
+<p>If you wanted to, you could at this point try some transformations to see if you can make it so that there is equal variance in neuron cell density across the two groups.</p>
+<p>Or, you can just use the Welch’s t-test. This test is still a parametric one, because it still assumes the data follow a normal distribution in each group. It’s just that this test has relaxed the assumption of equal variance.</p>
+<p>Implement the Welch’s t-test:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(neurons <span class="sc">~</span> group, <span class="at">data =</span> Alzheimers, <span class="at">alternative =</span> <span class="st">"two.sided"</span>, <span class="at">var.equal =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  neurons by group
+t = -1.58, df = 116.81, p-value = 0.1168
+alternative hypothesis: true difference in means between group Asymptomatic and group Symptomatic is not equal to 0
+95 percent confidence interval:
+ -2.3341297  0.2625443
+sample estimates:
+mean in group Asymptomatic  mean in group Symptomatic 
+                  20.06327                   21.09906 </code></pre>
+</div>
+</div>
+<p>Note that the code above is the same as for the two-sample t-test, except we now specify <code>var.equal = FALSE</code></p>
+<p>To write up our results, we would still want to calculate the SE for each group:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">std.error</span>(Alzheimers<span class="sc">$</span>neurons[Alzheimers<span class="sc">$</span>group<span class="sc">==</span><span class="st">"Asymptomatic"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1890569</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">std.error</span>(Alzheimers<span class="sc">$</span>neurons[Alzheimers<span class="sc">$</span>group<span class="sc">==</span><span class="st">"Symptomatic"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6277142</code></pre>
+</div>
+</div>
+<p>A Welch’s two-sample t-test was used to compare neuron cell density (million cells per gram) between asymptomatic and symptomatic individuals. There was no significant difference between the groups (t = -1.58, df = 116.8, p = 0.12). The mean ± SE neuron cell density was 20.06 ± 0.19 million/g in the asymptomatic group and 21.10 ± 0.63 million/g in the symptomatic group, with a 95% confidence interval for the difference ranging from -2.33 to 0.26 million/g.</p>
+</section>
+</section>
+</section>
+<section id="paired-t-test" class="level2">
+<h2 class="anchored" data-anchor-id="paired-t-test">Paired t-test</h2>
+<p>Also known as a dependent-samples t-test, this t-test is used when there is dependence between the two groups of observations.</p>
+<p>For example, imagine we give a drug to patients and measure their diastolic blood pressure before and after taking the drug. The measurements are dependent because each individual’s readings are linked: someone with a high initial blood pressure is likely to have a relatively high post-treatment reading as well. The paired t-test accounts for this within-subject dependence.</p>
+<p>Let’s simulate some data from 50 patients:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">13</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Simulate “before” blood pressure (normal distribution around 80 mmHg)</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>before <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> <span class="dv">80</span>, <span class="at">sd =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Simulate “after” blood pressure - let’s imagine average bp is reduced by 10 mmHg:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>after <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> <span class="dv">75</span>, <span class="at">sd =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Combine into dataframe with patient ID:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ID =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>, <span class="at">times =</span> <span class="dv">2</span>), <span class="at">dbp =</span> <span class="fu">c</span>(before, after), <span class="at">time =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"before"</span>, <span class="st">"after"</span>), <span class="at">each =</span> <span class="dv">50</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Let’s take a look at the data:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID      dbp   time
+1  1 85.54327 before
+2  2 77.19728 before
+3  3 97.75163 before
+4  4 81.87320 before
+5  5 91.42526 before
+6  6 84.15526 before</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="now-plot-the-boxplot" class="level1">
+<h1>Now plot the boxplot:</h1>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(data<span class="sc">$</span>dbp <span class="sc">~</span> data<span class="sc">$</span>time, <span class="at">xlab =</span> <span class="st">"Timepoint"</span>, <span class="at">ylab =</span> <span class="st">"Diastolic blood pressure (mmHg)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>To make the “before” sit on the left of the boxplot and “after” sit on the right, we can change the order that R recognises them in:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>time <span class="ot">&lt;-</span> <span class="fu">factor</span>(data<span class="sc">$</span>time, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"before"</span>, <span class="st">"after"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now try plotting again:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(data<span class="sc">$</span>dbp <span class="sc">~</span> data<span class="sc">$</span>time, <span class="at">xlab =</span> <span class="st">"Timepoint"</span>, <span class="at">ylab =</span> <span class="st">"Diastolic blood pressure (mmHg)"</span>, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"Before"</span>, <span class="st">"After"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-43-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Let’s check our assumptions:</p>
+<section id="assumption-1-data-are-continuous" class="level5">
+<h5 class="anchored" data-anchor-id="assumption-1-data-are-continuous">Assumption 1: Data are continuous</h5>
+<p>Yes, we know this is the case.</p>
+</section>
+<section id="assumption-2-data-are-made-up-of-paired-observations" class="level5">
+<h5 class="anchored" data-anchor-id="assumption-2-data-are-made-up-of-paired-observations">Assumption 2: Data are made up of paired observations</h5>
+<p>We know this is the case because it’s a before and after experiment on the same group of patients.</p>
+</section>
+<section id="assumption-3-there-is-independence-of-the-paired-observations---in-other-words-no-one-pair-of-observations-affects-any-other." class="level5">
+<h5 class="anchored" data-anchor-id="assumption-3-there-is-independence-of-the-paired-observations---in-other-words-no-one-pair-of-observations-affects-any-other.">Assumption 3: There is independence of the paired observations - in other words no one pair of observations affects any other.</h5>
+<p>We can assume this is true in this case because in most cases where drugs are administered, patients don’t know the identities of other patients, so wouldn’t be likely to affect their treatment.</p>
+</section>
+<section id="assumption-4-the-differences-between-paired-observations-are-approximately-normally-distributed." class="level5">
+<h5 class="anchored" data-anchor-id="assumption-4-the-differences-between-paired-observations-are-approximately-normally-distributed.">Assumption 4: The differences between paired observations are approximately normally distributed.</h5>
+<p>This fourth assumption is a little different to what we’ve seen before. Essentially we need to take the difference between before and after for each patient, and then see if that is normally distributed. It’s quite straightforward to do. We just subtract the after from the before, and then plot a histogram of these values:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>diff <span class="ot">&lt;-</span> data<span class="sc">$</span>dbp[data<span class="sc">$</span>time<span class="sc">==</span><span class="st">"before"</span>] <span class="sc">-</span> data<span class="sc">$</span>dbp[data<span class="sc">$</span>time<span class="sc">==</span><span class="st">"after"</span>]</span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb79-4"><a href="#cb79-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-5"><a href="#cb79-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(diff, <span class="at">main =</span> <span class="st">"Histogram"</span>, <span class="at">las =</span> <span class="dv">1</span>)</span>
+<span id="cb79-6"><a href="#cb79-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-7"><a href="#cb79-7" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(diff, <span class="at">las =</span> <span class="dv">1</span>); <span class="fu">qqline</span>(diff)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-44-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This definitely looks normally distributed.</p>
+<p>And that’s it for Paired t-test assumptions (there is no assumption of equal variance). This is because the test is based on the differences within each pair, so it only uses the variance of the differences.</p>
+<p>Let’s perform the Paired t-test:</p>
+<p>I always like to plot the data again before running a test, just so when I see the output from the test I can also see the data:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(data<span class="sc">$</span>dbp <span class="sc">~</span> data<span class="sc">$</span>time, <span class="at">xlab =</span> <span class="st">"Timepoint"</span>, <span class="at">ylab =</span> <span class="st">"Diastolic blood pressure (mmHg)"</span>, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"Before"</span>, <span class="st">"After"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-45-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Once again it’s the same <code>t.test()</code> function, but now setting <code>paired = TRUE</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(data<span class="sc">$</span>dbp[data<span class="sc">$</span>time<span class="sc">==</span><span class="st">"before"</span>], data<span class="sc">$</span>dbp[data<span class="sc">$</span>time<span class="sc">==</span><span class="st">"after"</span>], <span class="at">paired =</span> <span class="cn">TRUE</span>, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Paired t-test
+
+data:  data$dbp[data$time == "before"] and data$dbp[data$time == "after"]
+t = 2.924, df = 49, p-value = 0.00522
+alternative hypothesis: true mean difference is not equal to 0
+95 percent confidence interval:
+ 1.785060 9.631205
+sample estimates:
+mean difference 
+       5.708133 </code></pre>
+</div>
+</div>
+<p>Once more, you need to calculate standard error.</p>
+<p>In fact, for paired analyses you should calculate the SE of the differences between before and after:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">std.error</span>(diff)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.95219</code></pre>
+</div>
+</div>
+<p>If you wanted to, you could also calculate the SE for each timepoint:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">std.error</span>(data<span class="sc">$</span>dbp[data<span class="sc">$</span>time<span class="sc">==</span><span class="st">"before"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.378942</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">std.error</span>(data<span class="sc">$</span>dbp[data<span class="sc">$</span>time<span class="sc">==</span><span class="st">"after"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.321624</code></pre>
+</div>
+</div>
+<p>Now you have a go at writing up the results!</p>
+</section>
+<section id="one-tailed-test" class="level3">
+<h3 class="anchored" data-anchor-id="one-tailed-test">One-tailed test</h3>
+<p>A one-tailed test assesses whether a difference exists in a specific direction, rather than just any difference as in a two-tailed test.</p>
+<p>We’ll use the blood pressure data we just simulated to illustrate this.</p>
+<p>We don’t need to repeat all of the assumption checks we did previously; we just need to focus on the research question.</p>
+<p>Suppose we are specifically interested in whether the drug reduces blood pressure.</p>
+<p>We can perform the paired t-test like this:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(data<span class="sc">$</span>dbp[data<span class="sc">$</span>time<span class="sc">==</span><span class="st">"after"</span>], data<span class="sc">$</span>dbp[data<span class="sc">$</span>time<span class="sc">==</span><span class="st">"before"</span>], <span class="at">paired =</span> <span class="cn">TRUE</span>, <span class="at">alternative =</span> <span class="st">"less"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Paired t-test
+
+data:  data$dbp[data$time == "after"] and data$dbp[data$time == "before"]
+t = -2.924, df = 49, p-value = 0.00261
+alternative hypothesis: true mean difference is less than 0
+95 percent confidence interval:
+      -Inf -2.435187
+sample estimates:
+mean difference 
+      -5.708133 </code></pre>
+</div>
+</div>
+<p>The key to getting the order of the variables the correct way round in the one-tailed test is by thinking of the following sentence:</p>
+<p>The first variable is “less/greater” than the second.</p>
+<p>So if you wanted to find out if after is less than before, you need to put after first and before second, with an <code>alternative = "less"</code>.</p>
+<p>Let’s think about the hypotheses in this case:</p>
+<p><strong>Null hypothesis (H0)</strong>: There is no difference in diastolic blood pressure before and after the drug.</p>
+<p><strong>Alternative hypothesis (H1)</strong>: The diastolic blood pressure after the drug is lower than before the drug.</p>
+<p>So with a p-value &lt; 0.05, we conclude that the blood pressure is lower after the drug.</p>
+<p>And we can also see from the output of that test that on average it’s 5.7 mmHg lower after compared to before.</p>
+<p>Don’t forget the SE of the differences:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="fu">std.error</span>(diff)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.95219</code></pre>
+</div>
+</div>
+</section>
+<section id="non-parametric-version-of-a-t-test" class="level3">
+<h3 class="anchored" data-anchor-id="non-parametric-version-of-a-t-test">Non-parametric version of a t-test</h3>
+<p>Imagine we go out and count the number of insects in different habitats:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>)</span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>maize <span class="ot">&lt;-</span> <span class="fu">rpois</span>(<span class="dv">100</span>, <span class="dv">6</span>)</span>
+<span id="cb93-4"><a href="#cb93-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-5"><a href="#cb93-5" aria-hidden="true" tabindex="-1"></a>wheat <span class="ot">&lt;-</span> <span class="fu">rpois</span>(<span class="dv">100</span>, <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We want to test to see if there is a difference in the number of insects in each habitat:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(maize, wheat, <span class="at">xlab =</span> <span class="st">"Habitat"</span>, <span class="at">ylab =</span> <span class="st">"Number of insects"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-52-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Check assumptions:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(maize)</span>
+<span id="cb95-4"><a href="#cb95-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-5"><a href="#cb95-5" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(maize); <span class="fu">qqline</span>(maize)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-53-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(wheat)</span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(wheat); <span class="fu">qqline</span>(wheat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-53-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>These really don’t appear normal (the data appear to be “binned” into distinct values).</p>
+<p>In fact, when we <strong>count</strong> things we end up with whole numbers (integers) and therefore it tends to be the case that data don’t typically follow a normal distribution.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(wheat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.69697</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(maize)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6.519596</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(wheat)<span class="sc">/</span><span class="fu">var</span>(maize)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2602876</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var.test</span>(wheat, maize)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    F test to compare two variances
+
+data:  wheat and maize
+F = 0.26029, num df = 99, denom df = 99, p-value = 1.114e-10
+alternative hypothesis: true ratio of variances is not equal to 1
+95 percent confidence interval:
+ 0.1751323 0.3868482
+sample estimates:
+ratio of variances 
+         0.2602876 </code></pre>
+</div>
+</div>
+<p>And they almost certainly don’t have equal variance.</p>
+<p>Given that these are count data, and given that they violate both the assumptions of normality and equal variance, we would not be able to perform a parametric test and we would struggle to transform them in some way to meet the assumptions.</p>
+<p>Hence we would need to resort to a non-parametric test.</p>
+<p>The non-parametric equivalent to a two-sample t-test is called a Mann-Whitney U test.</p>
+<p>It is also known as a “Wilcoxon rank sum test”.</p>
+<p>To perform this test we use the <code>wilcox.test()</code> function in R:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(maize, wheat, <span class="at">paired =</span> F, <span class="at">alternative =</span> <span class="st">"two.sided"</span>, <span class="at">conf.int =</span> T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Wilcoxon rank sum test with continuity correction
+
+data:  maize and wheat
+W = 9346.5, p-value &lt; 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 3.000060 4.999984
+sample estimates:
+difference in location 
+              3.999952 </code></pre>
+</div>
+</div>
+<p>The <code>conf.int = T</code> tells R to include 95% confidence intervals</p>
+<p>By default R will implement a “continuity correction”. You don’t need to worry about this except to say that it’s more useful with smaller sample sizes. With large sample sizes the continuity correction has little effect.</p>
+<p>Whereas the t-test compares means between groups, the Wilcoxon rank sum test compares medians.</p>
+<p>Hence unlike reporting mean ± SE in a t-test, when reporting the result from a Wilcoxon rank sum test, you should report the median ± IQR.</p>
+<p>We can calculate these values quite easily:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(wheat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="fu">IQR</span>(wheat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(maize)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="fu">IQR</span>(maize)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+<p>Hence we can report it as:</p>
+<p>A Wilcoxon rank-sum test with continuity correction was used to compare insect counts between maize and wheat. There was a significant difference between the two crops (W = 9346.5, p &lt; 0.001). The median insect count was 6 (IQR: 4) for maize and 2 (IQR: 2) for wheat, with a 95% confidence interval for the difference in location of 3.00 to 5.00. This indicates that insect counts were generally higher on maize than on wheat.</p>
+</section>
+<section id="other-uses-of-wilcox.test" class="level3">
+<h3 class="anchored" data-anchor-id="other-uses-of-wilcox.test">Other uses of <code>wilcox.test()</code></h3>
+<p>Note that the <code>wilcox.test()</code> function can also be used as a non-parametric equivalent to the paired t-test and to the one-sample t-test. This is strictly speaking known as a Wilcoxon signed rank test.</p>
+<p>For example, non-parametric equivalent to paired t-test:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(data<span class="sc">$</span>dbp[data<span class="sc">$</span>time<span class="sc">==</span><span class="st">"before"</span>], data<span class="sc">$</span>dbp[data<span class="sc">$</span>time<span class="sc">==</span><span class="st">"after"</span>], <span class="at">paired =</span> T, <span class="at">conf.int =</span> T, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Wilcoxon signed rank test with continuity correction
+
+data:  data$dbp[data$time == "before"] and data$dbp[data$time == "after"]
+V = 923, p-value = 0.005938
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+  1.593642 10.274453
+sample estimates:
+(pseudo)median 
+       6.11048 </code></pre>
+</div>
+</div>
+<p>For example, non-parametric equivalent to a one-sample t-test:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(sealSub<span class="sc">$</span>logDist, <span class="at">mu =</span> knownVal, <span class="at">paired =</span> F, <span class="at">conf.int =</span> T, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Wilcoxon signed rank test with continuity correction
+
+data:  sealSub$logDist
+V = 1624, p-value = 0.8316
+alternative hypothesis: true location is not equal to 1.5
+95 percent confidence interval:
+ 1.289929 1.735375
+sample estimates:
+(pseudo)median 
+      1.525075 </code></pre>
+</div>
+</div>
+<p>One-tailed tests are also possible with either of the Wilcoxon signed rank, or the Wilcoxon rank sum (Mann-Whitney U) tests. In all cases the tests assess medians rather than means.</p>
+</section>
+</section>
+<section id="tasks" class="level1">
+<h1>TASKS</h1>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Task 1
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Write the code to perform a one-tailed non-parametric test to determine if, on average, male seal pups were older than female seal pups when they dispersed.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Task 2
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Using the <code>flowData</code> from the previous sessions, write the necessary code to perform an appropriate statistical analysis to determine if there is a difference in height between males and females</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Task 3
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Write up the results from the analysis performed in question 2.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Task 4
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Run the following code, and then perform an appropriate group comparison to determine if the effects of a drug given to patients was effective (the drug can be thought of being effective if it results in an increased erythrocyte sedimentation rate).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb119-2"><a href="#cb119-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb119-3"><a href="#cb119-3" aria-hidden="true" tabindex="-1"></a>drugData <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sedimentation =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">40</span>, <span class="dv">5</span>, <span class="dv">2</span>), <span class="fu">rnorm</span>(<span class="dv">40</span>, <span class="fl">5.5</span>, <span class="dv">2</span>)), <span class="at">patientID =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">40</span>, <span class="dv">2</span>), <span class="at">group =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"before"</span>,<span class="st">"after"</span>), <span class="at">each =</span> <span class="dv">40</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="bonus-density-dependent-dispersal" class="level3">
+<h3 class="anchored" data-anchor-id="bonus-density-dependent-dispersal">Bonus: Density-dependent dispersal</h3>
+<p>In the very first t-test example in this script, we assumed that one seal’s dispersal distance did not directly affect another’s.</p>
+<p>To be completely honest, we were overlooking some nuance there in order to keep things simple.</p>
+<p>In reality, dispersal distance in mammals can be influenced by the density of animals at the natal site (e.g.&nbsp;Matthysen, 2005; https://doi.org/10.1111/j.0906-7590.2005.04073.x).</p>
+<p>So, in our first t-test example, it would actually be more accurate to say that the assumption of independence may not be perfectly met. However, for the sake of demonstration, I proceeded anyway.</p>
+<p>In practice, you can still use a t-test when the assumption of independence is slightly violated — as long as you are transparent about this limitation and interpret your results cautiously.</p>
+<p>Let’s think about this biologically:</p>
+<p>Imagine you are a newborn grey seal pup. For the first three weeks of your life, you suckle the milk from your mother (just like other mammals - this is known as “weaning”). But after just three weeks you are abandoned and must survive on your own (that’s really what happens in grey seals!).</p>
+<p>When pups are born, they’re not alone — they’re surrounded by many others, sometimes hundreds. After weaning, all of these pups take to the sea and begin searching for food. Now, what would happen if every pup only travelled 1 km from the natal site?</p>
+<p>Of course, the nearby prey would be quickly depleted. This idea is known as “Ashmole’s halo” — the area around a colony that becomes depleted in food. This theory was first proposed by Ashmole in 1963, but recent empirical evidence has suggested it really happens: https://www.pnas.org/doi/10.1073/pnas.2101325118).</p>
+<p>So, if there are many other seals around, it may be better to travel further to find food. In other words, the higher the natal colony density, the greater the dispersal distance. This means that dispersal distances are not entirely independent — they are partly dependent on a shared ecological factor (density). There could also be some indirect dependence: if some seals stay close, others might move farther to avoid competition with others (this is known as interspecific competition; competition with others from within (inter) the same species).</p>
+<p>In summary, the distance each seal disperses is likely influenced by the density of its natal colony, and potentially also by the movements of other individuals.</p>
+<p>To properly account for these kinds of dependencies, we would need a more advanced statistical model that explicitly includes those effects — something you’ll explore in Year 2!</p>
+<p>For now, take a look at this boxplot:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb120"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(sealSub<span class="sc">$</span>logDist <span class="sc">~</span> sealSub<span class="sc">$</span>colony, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"North Pembrokeshire"</span>, <span class="st">"Ramsey"</span>, <span class="st">"Skomer"</span>), <span class="at">xlab =</span> <span class="st">"Seal colony"</span>, <span class="at">ylab =</span> <span class="st">"log10 dispersal distance (km)"</span>, <span class="at">las =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practical-4---Group-comparisons_files/figure-html/unnamed-chunk-60-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Given what you’ve just read, what might you deduce about these three different seal colonies?</p>
+</section>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
