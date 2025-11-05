@@ -1,0 +1,492 @@
+---
+title: "Practical 4 - Analysing count data"
+subtitle: "Testing for differences in proportions"
+author: "Dr William Kay"
+date: today
+format: 
+  html:
+    css: styles.css
+editor: visual
+---
+
+# Learning Outcomes (LOs)
+
+Here's what you should know and be able to do after completing this practical:
+
+-   LO1: Perform, interpret, and report the results from a chi-square goodness of fit test
+
+-   LO2: Perform, interpret, and report the results from a chi-square contingency table test
+
+-   LO3: Perform, interpret, and report the results from a fisher's exact test
+
+-   LO4: Explain when to use a fisher's exact test
+
+-   LO5: Create contingency tables of data
+
+-   LO6: Plot count data using barplots and mosaic plots
+
+-   LO7: Represent frequency data as counts, proportions, and percentages
+
+# Tutorial
+
+### Chi-squared goodness of fit test
+
+The chi-square goodness-of-fit test is used to check whether an observed distribution matches an expected distribution.
+
+In other words, it tests if the frequencies you observed in your data are consistent with what you would expect under a hypothesis.
+
+#### Example:
+
+We survey three equally sized areas and count the number of elephants in each. We count 11, 25, and 9 elephants.
+
+Observed counts:
+
+```{r}
+observed <- c(11, 25, 9)
+```
+
+If the population of elephants were spread equally across the three areas, we would expect to observe 1/3 of the population in each. In other words, out of a total of 45 elephants (11 + 25 + 9), we would expect to see 15, 15, 15.
+
+When creating our "expected" values, we have to state these as proportions and they must sum to 1:
+
+```{r}
+expected <- c(1/3, 1/3, 1/3) # Use fractions to ensure the three elements add up to 1
+```
+
+To perform a chi-squared goodness of fit test we now simply enter our expected and observed values:
+
+```{r}
+chisq.test(observed, p = expected) 
+```
+
+To report the results, we need to calculate the actual percentages observed in each area.
+
+Start by calculating the total number of elephants:
+
+```{r}
+total <- sum(11, 25, 9)
+```
+
+And then divide the count in each area by the total (multiply by 100 to convert to %)
+
+```{r}
+11/total*100 # Area 1
+
+25/total*100 # Area 2
+
+9/total*100  # Area 3
+```
+
+So we see approximately 24.4 % in area 1, 55.6 % in area 2, and 20 % in area 3
+
+#### Report the results:
+
+The chi-square goodness-of-fit test showed that elephant counts differed significantly across the three areas (χ² = 10.133, df = 2, p = 0.006303). Elephants were not evenly distributed, with 24.4 % in Area 1, 55.6 % in Area 2, and 20 % in Area 3.
+
+#### Plotting the results:
+
+We could plot the data using a barplot:
+
+```{r}
+barplot(observed, 
+        names = c("Area 1", "Area 2", "Area 3"), 
+        ylab = "Number of Elephants", 
+        xlab = "Area",
+        las = 1)
+```
+
+Note we could also plot these values as proportions.
+
+```{r}
+proportions <- observed / total 
+barplot(proportions, 
+        names = c("Area 1", "Area 2", "Area 3"),
+        ylab = "Proportion of Total",
+        xlab = "Area",
+        las = 1,
+        ylim = c(0, 1))
+```
+
+Or we could plot the values as percentages by simplying multiplying the proportions by 100:
+
+```{r}
+barplot(proportions * 100, 
+        names = c("Area 1", "Area 2", "Area 3"),
+        ylab = "Percentage of Total",
+        xlab = "Area",
+        las = 1,
+        ylim = c(0, 100))
+```
+
+#### What if the areas weren't equally sized?
+
+This might lead us to change our hypothesis regarding what the expected values would be.
+
+Let's assume areas 1 and 3 were half as large as area 2. We would expect to see twice as many elephants in area 2 compared to 1 and 3:
+
+```{r}
+expected <- c(1/4, 1/2, 1/4)
+
+chisq.test(observed, p = expected) 
+```
+
+You can now have a go at reporting the results from the above!
+
+### Chi-squared test for association
+
+A chi-square test for association is also know as:
+
+-   chi-square contingency table test
+
+-   chi-square test of independence
+
+This test examines whether categorical variables are associated with each other.
+
+To look at an example we're going to use the `Titanic` dataset in R - this is a built-in dataset
+
+```{r}
+Titanic
+```
+
+Using the question mark will tell you about the dataset:
+
+```{r eval = FALSE}
+?Titanic
+```
+
+The `Titanic` object in R is a table with 4 sub elements. Accessing elements from a table is a little bit odd. Here are some examples of how to inspect it.
+
+**NOTE**: If when creating an object you wrap a line of code in parentheses `()`, R will also print the object that you just created
+
+#### Sum the number of passengers of each class
+
+```{r}
+(class <- apply(Titanic, c(1), sum))
+```
+
+#### Sum the number of passengers of each sex
+
+```{r}
+(sex <- apply(Titanic, c(2), sum))
+```
+
+#### Sum the number of passengers of each age class
+
+```{r}
+(age <- apply(Titanic, c(3), sum))
+```
+
+#### Sum the number of passengers who survived (Yes or No)
+
+```{r}
+(survival <- apply(Titanic, c(4), sum))
+```
+
+We can do the same over multiple variables to start creating contingency tables:
+
+For example how many people of each class survived:
+
+```{r}
+(classSurvival <- apply(Titanic, c(1, 4), sum))
+```
+
+We can then use these for various plot functions:
+
+```{r}
+par(mfrow=c(2,2))
+
+barplot(class, las = 1, ylab = "Number of passengers", xlab = "Class", ylim = c(0, 1000))
+
+barplot(sex, ylab = "Number of passengers", xlab = "Sex", ylim = c(0, 2000))
+
+barplot(age, ylab = "Number of passengers", xlab = "Age", ylim = c(0, 2500))
+
+barplot(survival, ylab = "Number of passengers", xlab = "Survived", ylim = c(0, 1600))
+
+par(mfrow=c(1,1))
+
+barplot(classSurvival, ylab = "Number of passengers", xlab = "Survived", ylim = c(0, 1600), legend.text = T, args.legend = list(bty = "n", title = "Class"))
+```
+
+One other way to plot count data across multiple categorical variables is with a mosaic plot:
+
+```{r}
+install.packages("graphics")
+
+library(graphics)
+
+mosaicplot(classSurvival, color = TRUE, main = NULL)
+```
+
+Finally, we can look at the numbers of observations in each group:
+
+```{r}
+classSurvival
+```
+
+And we can use the function `prop.table()` to look at the proportions (of the total) in each group:
+
+```{r}
+prop.table(classSurvival)
+```
+
+This shows us, out of 100 %, what proportion of individuals survived from each class i.e., out of all possible observations, which is equal to 2201:
+
+```{r}
+sum(classSurvival)
+```
+
+For example we see that ~ 5.5 % of 1st-class passengers did not survive whereas ~ 9.2 % survived. But for 3rd-class: ~ 24 % did not survive and ~ 8 % survived.
+
+We can perform a chi-square test for association to see if survival probability is associated with passenger class.
+
+We are essentially asking the following question: Did survival probability differ according to class?
+
+Start by looking at the data:
+
+```{r}
+barplot(classSurvival, ylab = "Number of passengers", xlab = "Survived", ylim = c(0, 2000), legend.text = T, args.legend = list(bty = "n", title = "Class"), las = 1)
+```
+
+Alternatively plot the proportions:
+
+```{r}
+barplot(prop.table(classSurvival), ylab = "Proportion of passengers", xlab = "Survived", ylim = c(0, 1), legend.text = T, args.legend = list(bty = "n", title = "Class"), las = 1)
+```
+
+To perform the chi-squared test for association, we again simply use the `chisq.test()` function. However this time, rather than state observed versus expected values, we simply present the contingency table `classSurvival`. The null hypothesis is that the counts in each cell are equal.
+
+Note that `correct = F` disables something called "Yates' continuity correction".
+
+Yates' continuity correction is a method that has previously been used when cell frequencies were < 5 but nowadays we tend to use Fisher's exact test in this situation. For more details, see: https://doi.org/10.1016/B978-012088770-5/50045-9 (page 99):
+
+```{r}
+chisq.test(classSurvival, correct = F)
+```
+
+This is a highly significant result which suggests there is an association between class and survival. In other words, the survival probability differed according to class.
+
+Let's calculate % survival for each class in order to describe this association:
+
+Importantly here, we want to calculation proportions for each class separately, so we can't simply use the values from `prop.table()`. We have to do it manually:
+
+```{r}
+classSurvival
+
+(class1 <- 122 + 203)
+
+(class2 <- 167 + 118)
+
+(class3 <- 528 + 178)
+
+(crew <- 673 + 212)
+
+(class1prob <- 203/class1*100)
+
+(class2prob <- 118/class2*100)
+
+(class3prob <- 178/class3*100)
+
+(crewProb <- 212/crew*100)
+```
+
+### Report the results:
+
+The results from our chi-squared test for association indicated that there was an association between class and survival aboard the Titanic (X2 = 190.4, df = 3, p < 2.2x10-16). Specifically, survival probability for each class of passenger was as follows: 1st class = 62.5%, 2nd class = 41.4%, 3rd class = 25.2%, and Crew = 24 %.
+
+Note that the reason this result came about was because higher class passengers were given priority to disembark the Titanic on to the lifeboats
+
+### Sex and survival
+
+Let's use a chi-squared test for association to see if there was an association between survival rate and sex:
+
+```{r}
+(sexSurvival <- apply(Titanic, c(2, 4), sum))
+
+chisq.test(classSurvival, correct = F)
+```
+
+Clearly there is an association here too - a greater proportion of female passenger were given priority to gain access to the lifeboats.
+
+### Fisher's exact test
+
+Note that if we had a small cell count (< 5) in any of our cells, we could use Fisher's exact test. 
+
+We don't need to do it in either of the previous two examples, so let's simulate an example.
+
+Let's imagine we give two different diets to fish and see if they gain weight.
+
+We only look at 15 fish in total. Here's the simulated data of counts of fish who gained weight versus not, by diet:
+
+```{r}
+weights <- matrix(c(7, 1, 2, 5), nrow = 2, byrow = TRUE)
+
+rownames(weights) <- c("Diet A", "Diet B")
+
+colnames(weights) <- c("Gained weight", "Did not gain weight")
+
+weights
+```
+
+We can again plot the data using a barplot but this time let's put the bars next to each other using `beside = T`:
+
+```{r}
+barplot(weights, 
+        beside = TRUE,
+        legend.text = TRUE, 
+        args.legend = list(title = "Diet", bty = "n", x = "top"),
+        ylab = "Number of Fish", 
+        xlab = "Diet", las = 1)
+
+```
+
+If we perform a chi-square contingency table test we will get a warning:
+
+```{r}
+chisq.test(weights)
+```
+
+This warning is because some of the expected counts are less than 5.
+
+Hence we should use the `fisher.test()`
+
+```{r}
+fisher.test(weights)
+```
+
+### Creating your own contingency table
+
+Above we created our own contingency table. Here is some more guidance on how to do  this if you had to do it in R by hand:
+
+We use the `matrix()` function to specify a string of numbers
+
+We have to enter the numbers in the following order: column 1 then column 2
+
+We also have to tell R how many rows using `nrow`
+
+We could create the example from the lecture which examines lung cancer prevalence in men and women who smoke:
+
+```{r}
+cancerBySex <- matrix(c(100, 96, 201, 200), nrow = 2)
+```
+
+We then have to state what the names are for the table:
+
+```{r}
+dimnames(cancerBySex) = list(c("Men", "Women"), c("Non-smoker", "Smoker"))
+```
+
+Ask R to print the object to check you did it right - does it match the lecture slides?
+
+```{r}
+cancerBySex
+```
+
+### Using data from a .csv file
+
+If you had data stored in a .csv file and you wanted to create a contingency table, this is quite straightforward:
+
+First read in the data (use the "Spirometry.csv") file:
+
+```{r}
+data <- read.csv(file.choose(), header = T, stringsAsFactors = T)
+```
+
+Take a quick look:
+
+```{r}
+head(data)
+```
+
+We can see that these data include things like information on people of different  sexes and if they have respiratory infections.
+
+Create contingency table of respiratory infection against sex:
+
+```{r}
+(count <- table(data$Sex, data$RespInfection))
+```
+
+Plot the table:
+
+```{r}
+barplot(count, beside = T, ylab = "Number of people", xlab = "Asthma", las = 1, ylim = c(0, 250), legend.text = T, args.legend = list(bg = "white", cex = 1.2, title = "Sex"), names = c("No", "Yes"))
+```
+
+# Tasks
+
+::: {.callout-note collapse="true"}
+## Task 1
+
+Write the results for the analysis for `sexSurvival.` Remember to report the percentages for each category - you may need to calculate the percentages yourself (write the code for this too!):
+
+:::
+
+::: {.callout-note collapse="true"}
+## Task 2
+
+Write the code to conduct an appropriate chi-squared test the examine if there is a difference in proportion of asthma sufferers amongst men and women (using the Spirometry data):
+:::
+
+::: {.callout-note collapse="true"}
+## Task 3
+
+Write the code to create your own 2 x 2 contingency table which examines male and female orangutans in pristine versus degraded habitat. 
+
+Specifically, you observe 10 males in pristine habitat and 3 in degraded; and you observe 12 females in pristine habitat versus 6 in degraded.
+:::
+
+::: {.callout-note collapse="true"}
+## Task 4
+
+Write the code to conduct an appropriate analysis to examine if there is an association between sex and habitat type in the number of orangutans you observed
+:::
+
+# Bonus
+
+If you have completed all of the above (and for future reference), here is a useful guide with code to explore the Titanic data in different ways (using different visualisations): https://cran.r-project.org/web/packages/explore/vignettes/explore_titanic.html
+
+I have copied the code below from this webpage, but you will need to view the webpage to understand what each of the lines of code do.
+
+To run the code from that link you will need to install a few packages.
+
+```{r}
+install.packages("dplyr", repos = "https://cloud.r-project.org/")
+
+install.packages("tibble", repos = "https://cloud.r-project.org/")
+
+install.packages("explore", repos = "https://cloud.r-project.org/")
+
+library(dplyr)
+
+library(tibble)
+
+library(explore)
+
+titanic <- as_tibble(Titanic)
+
+titanic %>% describe_tbl(n = n)
+
+titanic %>% describe()
+
+titanic %>% head(10)
+
+titanic %>% explore(Class, n = n)
+
+titanic %>% describe(Class, n = n)
+
+titanic %>% explore_all(n = n)
+
+titanic %>% explore(Class, target = Survived, n = n, split = FALSE)
+
+titanic %>% explore(Class, target = Survived, n = n, split = TRUE)
+
+titanic %>% explore(Sex, target = Survived, n = n)
+
+titanic %>% explore(Age, target = Survived, n = n)
+
+titanic %>% explain_tree(target = Survived, n = n)
+
+titanic %>% explore(Age, target = Class, n = n)
+
+titanic %>% explore(Sex, target = Class, n = n)
+```
