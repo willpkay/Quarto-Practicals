@@ -1,5 +1,5 @@
 ---
-title: "Practical 4 - Analysing count data"
+title: "Practical 5 - Analysing count data"
 subtitle: "Testing for differences in proportions"
 author: "Dr William Kay"
 date: today
