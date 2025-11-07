@@ -236,7 +236,7 @@ This shows us, out of 100 %, what proportion of individuals survived from each c
 sum(classSurvival)
 ```
 
-For example we see that ~ 5.5 % of 1st-class passengers did not survive whereas ~ 9.2 % survived. But for 3rd-class: ~ 24 % did not survive and ~ 8 % survived.
+For example we see that \~ 5.5 % of 1st-class passengers did not survive whereas \~ 9.2 % survived. But for 3rd-class: \~ 24 % did not survive and \~ 8 % survived.
 
 We can perform a chi-square test for association to see if survival probability is associated with passenger class.
 
@@ -258,7 +258,7 @@ To perform the chi-squared test for association, we again simply use the `chisq.
 
 Note that `correct = F` disables something called "Yates' continuity correction".
 
-Yates' continuity correction is a method that has previously been used when cell frequencies were < 5 but nowadays we tend to use Fisher's exact test in this situation. For more details, see: https://doi.org/10.1016/B978-012088770-5/50045-9 (page 99):
+Yates' continuity correction is a method that has previously been used when cell frequencies were \< 5 but nowadays we tend to use Fisher's exact test in this situation. For more details, see: https://doi.org/10.1016/B978-012088770-5/50045-9 (page 99):
 
 ```{r}
 chisq.test(classSurvival, correct = F)
@@ -292,7 +292,7 @@ classSurvival
 
 ### Report the results:
 
-The results from our chi-squared test for association indicated that there was an association between class and survival aboard the Titanic (X2 = 190.4, df = 3, p < 2.2x10-16). Specifically, survival probability for each class of passenger was as follows: 1st class = 62.5%, 2nd class = 41.4%, 3rd class = 25.2%, and Crew = 24 %.
+The results from our chi-squared test for association indicated that there was an association between class and survival aboard the Titanic (X2 = 190.4, df = 3, p \< 2.2x10-16). Specifically, survival probability for each class of passenger was as follows: 1st class = 62.5%, 2nd class = 41.4%, 3rd class = 25.2%, and Crew = 24 %.
 
 Note that the reason this result came about was because higher class passengers were given priority to disembark the Titanic on to the lifeboats
 
@@ -303,14 +303,14 @@ Let's use a chi-squared test for association to see if there was an association 
 ```{r}
 (sexSurvival <- apply(Titanic, c(2, 4), sum))
 
-chisq.test(classSurvival, correct = F)
+chisq.test(sexSurvival, correct = F)
 ```
 
 Clearly there is an association here too - a greater proportion of female passenger were given priority to gain access to the lifeboats.
 
 ### Fisher's exact test
 
-Note that if we had a small cell count (< 5) in any of our cells, we could use Fisher's exact test. 
+Note that if we had a small cell count (\< 5) in any of our cells, we could use Fisher's exact test.
 
 We don't need to do it in either of the previous two examples, so let's simulate an example.
 
@@ -356,7 +356,7 @@ fisher.test(weights)
 
 ### Creating your own contingency table
 
-Above we created our own contingency table. Here is some more guidance on how to do  this if you had to do it in R by hand:
+Above we created our own contingency table. Here is some more guidance on how to do this if you had to do it in R by hand:
 
 We use the `matrix()` function to specify a string of numbers
 
@@ -373,7 +373,7 @@ cancerBySex <- matrix(c(100, 96, 201, 200), nrow = 2)
 We then have to state what the names are for the table:
 
 ```{r}
-dimnames(cancerBySex) = list(c("Men", "Women"), c("Non-smoker", "Smoker"))
+dimnames(cancerBySex) = list(c("Men", "Women"), c("No cancer", "Cancer"))
 ```
 
 Ask R to print the object to check you did it right - does it match the lecture slides?
@@ -398,7 +398,7 @@ Take a quick look:
 head(data)
 ```
 
-We can see that these data include things like information on people of different  sexes and if they have respiratory infections.
+We can see that these data include things like information on people of different sexes and if they have respiratory infections.
 
 Create contingency table of respiratory infection against sex:
 
@@ -418,7 +418,6 @@ barplot(count, beside = T, ylab = "Number of people", xlab = "Asthma", las = 1, 
 ## Task 1
 
 Write the results for the analysis for `sexSurvival.` Remember to report the percentages for each category - you may need to calculate the percentages yourself (write the code for this too!):
-
 :::
 
 ::: {.callout-note collapse="true"}
@@ -430,7 +429,7 @@ Write the code to conduct an appropriate chi-squared test the examine if there i
 ::: {.callout-note collapse="true"}
 ## Task 3
 
-Write the code to create your own 2 x 2 contingency table which examines male and female orangutans in pristine versus degraded habitat. 
+Write the code to create your own 2 x 2 contingency table which examines male and female orangutans in pristine versus degraded habitat.
 
 Specifically, you observe 10 males in pristine habitat and 3 in degraded; and you observe 12 females in pristine habitat versus 6 in degraded.
 :::
